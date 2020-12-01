@@ -2,14 +2,30 @@
 # one dimensional N/Z linear set
 class object:
 
-	self.base;
+	self.base = 0;
 	self.periods = set();
 
 	# 1 = N linear, -1 Z linear (i.e. allows negative)
-	self.type;
+	self.type =1;
+
+	def __init__(self,b,p,t):
+		self.base = b
+		self.periods = set([p]) 
+		self.setType(t)
+
+	def setType(self, t):
+		if abs(t) != 1:
+			return False
+		self.type = t
 
 	def setBase(self, base):
 		self.base = base
+
+	def getPeriod(self):
+		if len(self.periods) == 0:
+			return None;
+
+		return self.periods[0]
 
 	def addPeriod(self,period):
 		self.periods.add(period)
@@ -17,15 +33,17 @@ class object:
 		if len(self.periods) > 1:
 			self.periods = {lcm(self.periods)}
 
-	def setType(self,type):
-		self.type = type
+		if type == -1 and self.base > self.getPeriod():
+			self.base = self.base mod self.getPeriod()
 
 	def contains(self, number):
+
+		period = self.getPeriod()
+
 		# singleton object
-		if len(self.periods) == 0:
+		if period == None:
 			return number == self.base
 
-		period = list(self.periods)[0]
 		base = self.base
 		required = (number- base)/periods
 		if not isInteger(required):
