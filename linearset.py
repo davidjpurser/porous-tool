@@ -1,16 +1,32 @@
 
 # one dimensional N/Z linear set
-class object:
+class linearset:
 
-	self.base = 0;
-	self.periods = set();
+	base = 0;
+	periods = set();
 
 	# 1 = N linear, -1 Z linear (i.e. allows negative)
-	self.type =1;
+	type =1
 
-	def __init__(self,b,p,t):
+	def getTStr(self):
+		if self.type == 1:
+			return "N"
+		else:
+			return "Z"
+
+	def __repr__(self):
+
+		left = "{" + "{}".format(self.base) 
+		right = "}"
+		for x in self.periods:
+			left = left + " +{}{}".format(x,self.getTStr())
+		return left + right
+
+
+	def __init__(self,b,p=None,t=1):
 		self.base = b
-		self.periods = set([p]) 
+		if p != None:
+			self.periods = set([p]) 
 		self.setType(t)
 
 	def setType(self, t):
@@ -34,7 +50,7 @@ class object:
 			self.periods = {lcm(self.periods)}
 
 		if type == -1 and self.base > self.getPeriod():
-			self.base = self.base mod self.getPeriod()
+			self.base = self.base % self.getPeriod()
 
 	def contains(self, number):
 
@@ -61,6 +77,7 @@ class object:
 		#two objects are equivalent
 
 	def containsObject(self, object):
+		pass
 		#this is more general (covers) input
 
 	def objectContains(self, object):
