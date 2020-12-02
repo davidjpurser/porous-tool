@@ -1,8 +1,6 @@
 
-
+## f(x) = m x + a
 class function:
-	mult = 1
-	add = 0
 
 	def __init__(self,m,a):
 		self.mult = m

@@ -2,12 +2,8 @@
 # one dimensional N/Z linear set
 class linearset:
 
-	base = 0;
-	periods = set();
 
 	# 1 = N linear, -1 Z linear (i.e. allows negative)
-	type =1
-
 	def getTStr(self):
 		if self.type == 1:
 			return "N"
@@ -24,8 +20,10 @@ class linearset:
 
 
 	def __init__(self,b,p=None,t=1):
+		self.periods = set()
 		self.base = b
 		self.setType(t)
+		print(self.periods)
 		if p != None:
 			self.addPeriod(p)		
 
@@ -49,6 +47,7 @@ class linearset:
 	def addPeriod(self,period):
 		self.periods.add(period)
 
+		print(self.periods)
 		if len(self.periods) > 1:
 			self.periods = {lcm(self.periods)}
 

@@ -10,10 +10,21 @@ def lgcd(list):
     x = reduce(gcd, list)
     return x
 
+def findOmniCounter(counters):
+	offsets = [x.add for x in counters]
+	overalloffset = lgcd(offsets)
+
+	
+
+
+	return overalloffset
+
 functions = [
 	function(3,11),
-	function(1,3),
-	function(1,-43),
+	function(12,2),
+	function(-1,-3),
+	function(1,-18),
+	function(1,-12),
 ]
 print(functions)
 x = 1
@@ -23,7 +34,6 @@ def compute(x,target, functions):
 	functions = [x for x in functions if not x.isIdentity()]
 	print(functions)
 	x0 = set([x])
-	growStatus = [x.isGrower() for x in functions]
 	positiveCounter = [x.isPositiveCounter() for x in functions]
 	negativeCounter = [x.isNegativeCounter() for x in functions]
 	pureInverters = [x.isPureInverter() for x in functions]
@@ -38,21 +48,7 @@ def compute(x,target, functions):
 		functionsplus = functions + [a,b]
 		return compute(x,target, functionsplus)
 
-	if all(growStatus):
-		semi = semilinear()
-		growPoints =[x.growingFrom() for x in functions]
-		growPoint = max(growPoints)
-		growPoint = max(growPoint, target+2)
-		print(growPoints, growPoint)
-		start = saturateTo(x0, functions, growPoint)
-		semi.addPoints(start)
-		dir1 = linearset(growPoint,1,1)
-		dir2 = linearset(-growPoint,-1,1)
-		semi.add(dir1)
-		semi.add(dir2)
-		print(semi)
-		return semi
-
+	# bi-directional counters
 	if any(positiveCounter) and any(negativeCounter):
 		counters = [x for x in functions if x.isCounter()]
 		amounts = [x.getCounterAmount() for x in counters]
@@ -77,10 +73,51 @@ def compute(x,target, functions):
 		print(semi)
 		return semi
 
+	# there can only be one inverter
+	inverter = None
+	for x in functions:
+		if x.isPureInverter():
+			inverter = x
+	nonInverters = [x for x in functions if not x.isPureInverter()]
+	growStatus = [x.isGrower() for x in nonInverters]
+
+	# all nonInverters growers
+	if all(growStatus):
+		semi = semilinear()
+		growPoints =[x.growingFrom() for x in nonInverters]
+		growPoint = max(growPoints)
+		growPoint = max(growPoint, target+2)
+		lowerbound = -growPoint
+		upperbound = growPoint
+		if inverter != None:
+			if inverter.add >= 0:
+				upperbound += inverter.add
+			else:
+				lowerbound += inverter.add
+
+		start = saturateTo(x0, functions, max(-lowerbound, upperbound))
+		start = [x for x in start if x<=upperbound and x>=lowerbound]
+		semi.addPoints(start)
+		dir1 = linearset(upperbound,1,1)
+		dir2 = linearset(lowerbound,-1,1)
+		semi.add(dir1)
+		semi.add(dir2)
+		print(semi)
+		return semi
+
+	if any(positiveCounter) or any(negativeCounter):
+		semi = semilinear()
+		counters = [x for x in nonInverters if x.isCounter()]
+		print(findOmniCounter(counters))
+
+
+		return semi
+
 	print("I don't know how to handle this case")
 	return None
 
-compute(x,target,functions)
+semi = compute(x,target,functions)
+print(semi)
 	# print(f1.apply(4))
 	# # for _ in range(2):
 	# # 	x0 = applySet(x0, functions)

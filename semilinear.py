@@ -2,14 +2,17 @@ from linearset import *
 
 class semilinear:
 
-
-	lsets = set()
+	def __init__(self):
+		self.lsets = set()
 
 	def add(self,l):
 		self.lsets.add(l)
 
 
 	def __repr__(self):
+
+		if not self.lsets: #empty
+			return "{}"
 		return "U".join([str(x) for x in self.lsets])			
 
 
