@@ -16,6 +16,9 @@ class function:
 	def setAdd(self,add):
 		self.add = add
 
+	def getCounterAmount(self):
+		return abs(self.add)
+
 	def apply(self, x):
 		return self.mult *x + self.add
 
@@ -36,7 +39,5 @@ class function:
 
 	def growingFrom(self):
 		#only makes sense if not counter
-		return abs(self.add)/(abs(self.mult)-1)
+		return int(abs(self.add)/(abs(self.mult)-1))
 
-
-		

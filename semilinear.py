@@ -17,3 +17,9 @@ class semilinear:
 		for x in points:
 			p = linearset(x)
 			self.lsets.add(p)
+	
+	def contains(self, lset):
+		for x in self.lsets:
+			if x.isEqual(lset):
+				return True
+		return False

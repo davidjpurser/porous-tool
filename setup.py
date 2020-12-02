@@ -1,19 +1,30 @@
+import math
 from function import *
 from semilinear import *
 from linearset import *
 from helpers import *
+from functools import reduce
+from math import gcd
 
-f1 = function(3,6)
-f2 = function(-2,-9)
+def lgcd(list):
+    x = reduce(gcd, list)
+    return x
 
-
-functions = [f1,f2]
+functions = [
+	function(3,11),
+	function(-2,0),
+	function(1,33),
+	function(1,-11)
+]
 print(functions)
 
-x0 = set([1])
+x = 1
+x0 = set([x])
 target = 8
 
 growStatus = [x.isGrower() for x in functions]
+positiveCounter = [x.isPositiveCounter() for x in functions]
+negativeCounter = [x.isNegativeCounter() for x in functions]
 
 allGrowers = all(growStatus)
 print(growStatus, allGrowers)
@@ -32,8 +43,31 @@ if allGrowers:
 	semi.add(dir2)
 	print(semi)
 
-print(f1.apply(4))
-# for _ in range(2):
-# 	x0 = applySet(x0, functions)
-# 	print(x0)
-print(saturateTo(x0, functions, 100))
+if any(positiveCounter) and any(negativeCounter):
+	counters = [x for x in functions if x.isCounter()]
+	amounts = [x.getCounterAmount() for x in counters]
+	print(amounts)
+	period = lgcd(amounts)
+	print(period)
+	semi = semilinear()
+	lset1 = linearset(x,period,-1)
+	semi.add(lset1)
+	Q = [lset1]
+	while len(Q) > 0 :
+		top = Q.pop()
+		for f in functions:
+			b = top.getBase()
+			next = f.apply(b)
+			myset = linearset(next,period,-1)
+			print(next, linearset(next,period,-1))
+			if not semi.contains(myset):
+
+				semi.add(myset)
+				Q.append(myset)
+	print(semi)
+
+# print(f1.apply(4))
+# # for _ in range(2):
+# # 	x0 = applySet(x0, functions)
+# # 	print(x0)
+# print(saturateTo(x0, functions, 100))
