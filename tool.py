@@ -129,7 +129,7 @@ def buildinv(startpoint,target, functions):
 		print("there are counters! in both directions", a,b)
 		print("adding both", a,b)
 		functionsplus = functions + [a,b]
-		return compute(x,target, functionsplus)
+		return buildinv(startpoint,target, functionsplus)
 
 	# bi-directional counters
 	if any(positiveCounter) and any(negativeCounter):
@@ -139,7 +139,7 @@ def buildinv(startpoint,target, functions):
 		period = lgcd(amounts)
 		print(period)
 		semi = semilinear()
-		lset1 = linearset(x,period,-1)
+		lset1 = linearset(startpoint,period,-1)
 		saturateZs(semi,lset1,functions)
 		print(semi)
 		return semi

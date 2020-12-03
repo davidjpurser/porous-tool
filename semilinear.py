@@ -31,7 +31,7 @@ class semilinear:
 
 		if not self.lsets: #empty
 			return "{}"
-		return " U\n".join([str(x) for x in self.lsets])			
+		return " U ".join([str(x) for x in self.lsets])			
 
 
 	def addPoints(self, points):

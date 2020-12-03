@@ -17,9 +17,14 @@ class linearset:
 			left = left + " +{}{}".format(self.periods,self.getTStr())
 		left =  left + "}"
 		
+	
+		return left
+
+
+	def explainrepr(self):
+		left = __repr__(self)
 		if self.periods and self.type == 1 and self.base != self.base % self.periods:
 			left += "*{}*".format(self.base % self.periods)
-
 		return left
 
 
@@ -27,7 +32,6 @@ class linearset:
 		self.periods = None
 		self.base = b
 		self.setType(t)
-		print(self.periods)
 		if p != None:
 			self.addPeriod(p)		
 
@@ -95,8 +99,13 @@ class linearset:
 			# must contain the base element
 			return False
 
+		# singleton only, no need to check further
 		if not object.periods:
 			return True
+
+		# singleton cannot contain an non-singleton
+		if not self.periods:
+			return False
 
 		if self.type == 1 and object.type == -1:
 			# N can't contain Z

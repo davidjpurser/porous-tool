@@ -11,7 +11,11 @@ class function:
 			txt = ""
 		else:
 			txt = self.mult
-		return "f(x) = {}x + {}".format(txt,self.add)
+
+		answer = "f(x) = {}x".format(txt)
+		if self.add != 0:
+			answer += " + {}".format(self.add)
+		return answer
 
 	def setMult(self,mult):
 		self.mult = mult
