@@ -6,9 +6,8 @@ class semilinear:
 		self.lsets = set()
 
 	def add(self,l):
-		for x in self.lsets:
-			if x.containsObject(l):
-				return False
+		if self.containsFuzz(l):
+			return False
 
 		self.lsets = {x for x in self.lsets if not l.containsObject(x)}
 
@@ -21,12 +20,18 @@ class semilinear:
 
 		return False
 
+	def getZsets(self):
+		return [x for x in self.lsets if x.type == -1]
+
+	def getNsets(self):
+		return [x for x in self.lsets if x.type == 1 and x.periods != None]
+
 
 	def __repr__(self):
 
 		if not self.lsets: #empty
 			return "{}"
-		return "U".join([str(x) for x in self.lsets])			
+		return " U\n".join([str(x) for x in self.lsets])			
 
 
 	def addPoints(self, points):
@@ -37,5 +42,12 @@ class semilinear:
 	def contains(self, lset):
 		for x in self.lsets:
 			if x.isEqual(lset):
+				return True
+		return False
+
+
+	def containsFuzz(self, lset):
+		for x in self.lsets:
+			if x.containsObject(lset):
 				return True
 		return False

@@ -13,10 +13,14 @@ class linearset:
 	def __repr__(self):
 
 		left = "{" + "{}".format(self.base) 
-		right = "}"
 		if self.periods:
 			left = left + " +{}{}".format(self.periods,self.getTStr())
-		return left + right
+		left =  left + "}"
+		
+		if self.periods and self.type == 1 and self.base != self.base % self.periods:
+			left += "*{}*".format(self.base % self.periods)
+
+		return left
 
 
 	def __init__(self,b,p=None,t=1):
