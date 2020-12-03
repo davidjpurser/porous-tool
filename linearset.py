@@ -14,13 +14,13 @@ class linearset:
 
 		left = "{" + "{}".format(self.base) 
 		right = "}"
-		for x in self.periods:
-			left = left + " +{}{}".format(x,self.getTStr())
+		if self.periods:
+			left = left + " +{}{}".format(self.periods,self.getTStr())
 		return left + right
 
 
 	def __init__(self,b,p=None,t=1):
-		self.periods = set()
+		self.periods = None
 		self.base = b
 		self.setType(t)
 		print(self.periods)
@@ -39,17 +39,16 @@ class linearset:
 		self.base = base
 
 	def getPeriod(self):
-		if len(self.periods) == 0:
-			return None;
-
-		return list(self.periods)[0]
+		return self.periods
 
 	def addPeriod(self,period):
-		self.periods.add(period)
+		if self.periods != None:
+			exit("period is already set")
 
-		print(self.periods)
-		if len(self.periods) > 1:
-			self.periods = {lcm(self.periods)}
+		self.periods = period
+
+		if self.type == -1 and self.periods < 0:
+			self.periods = -self.periods
 
 		if self.type == -1 and (abs(self.base) >= self.getPeriod() or self.base < 0):
 			self.base = self.base % self.getPeriod()
@@ -63,8 +62,8 @@ class linearset:
 			return number == self.base
 
 		base = self.base
-		required = (number- base)/periods
-		if not isInteger(required):
+		required = (number- base)/period
+		if not required.is_integer():
 			return False
 
 		if self.type == 1 and required >= 0:
@@ -87,10 +86,29 @@ class linearset:
 		#two objects are equivalent
 
 	def containsObject(self, object):
-		pass
-		#this is more general (covers) input
+
+		if not self.contains(object.base):
+			# must contain the base element
+			return False
+
+		if not object.periods:
+			return True
+
+		if self.type == 1 and object.type == -1:
+			# N can't contain Z
+			return False
+
+		if not (object.periods / self.periods).is_integer():
+			return False
+
+		if self.type == 1 and object.type == 1:
+			if object.periods / self.periods < 0:
+				return False
+
+		return True
+
 
 	def objectContains(self, object):
 		# object is more general (covers) this
-		return obejct.containsObject(self)
+		return object.containsObject(self)
 

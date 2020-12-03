@@ -6,7 +6,20 @@ class semilinear:
 		self.lsets = set()
 
 	def add(self,l):
+		for x in self.lsets:
+			if x.containsObject(l):
+				return False
+
+		self.lsets = {x for x in self.lsets if not l.containsObject(x)}
+
 		self.lsets.add(l)
+
+	def includesNs(self):
+		for x in self.lsets:
+			if x.type == 1:
+				return True
+
+		return False
 
 
 	def __repr__(self):

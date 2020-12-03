@@ -10,14 +10,23 @@ def lgcd(list):
     x = reduce(gcd, list)
     return x
 
-def findOmniCounter(counters):
-	offsets = [x.add for x in counters]
-	overalloffset = lgcd(offsets)
 
-	
+def saturateZs(semi, lset1, functions):
+	semi.add(lset1)
+	period = lset1.getPeriod()
+	Q = [lset1]
+	while len(Q) > 0 :
+		top = Q.pop()
+		for f in functions:
+			b = top.getBase()
+			next = f.apply(b)
+			myset = linearset(next,period,-1)
+			print(next, linearset(next,period,-1))
+			if not semi.contains(myset):
+				semi.add(myset)
+				Q.append(myset)
+	return semi
 
-
-	return overalloffset
 
 functions = [
 	function(3,11),
@@ -29,11 +38,13 @@ functions = [
 print(functions)
 x = 1
 target = 8
-def compute(x,target, functions):
+def compute(startpoint,target, functions):
 	# strip useless identity function
+
+	x0 = set([startpoint])
 	functions = [x for x in functions if not x.isIdentity()]
 	print(functions)
-	x0 = set([x])
+	
 	positiveCounter = [x.isPositiveCounter() for x in functions]
 	negativeCounter = [x.isNegativeCounter() for x in functions]
 	pureInverters = [x.isPureInverter() for x in functions]
@@ -57,19 +68,7 @@ def compute(x,target, functions):
 		print(period)
 		semi = semilinear()
 		lset1 = linearset(x,period,-1)
-		semi.add(lset1)
-		Q = [lset1]
-		while len(Q) > 0 :
-			top = Q.pop()
-			for f in functions:
-				b = top.getBase()
-				next = f.apply(b)
-				myset = linearset(next,period,-1)
-				print(next, linearset(next,period,-1))
-				if not semi.contains(myset):
-
-					semi.add(myset)
-					Q.append(myset)
+		saturateZs(semi,lset1,functions)
 		print(semi)
 		return semi
 
@@ -108,8 +107,31 @@ def compute(x,target, functions):
 	if any(positiveCounter) or any(negativeCounter):
 		semi = semilinear()
 		counters = [x for x in nonInverters if x.isCounter()]
-		print(findOmniCounter(counters))
+		counteradds = [x.add for x in counters]
+		if counters[0].add > 0:
+			mincounter = min(counteradds)
+		else:
+			mincounter = max(counteradds)
 
+		modulo = abs(mincounter)
+
+		Ns = {}
+		Zs = {}
+
+		Ns[startpoint % modulo] = startpoint
+		
+		semi = semilinear()
+		starter = linearset(startpoint,mincounter, 1)
+		semi.add(starter)
+		if inverter:
+			second = inverter.apply(startpoint)
+			nextlset = linearset(second,mincounter,-1)
+			saturateZs(semi, nextlset, functions)
+			if not semi.includesNs():
+				print(semi)
+				return semi
+
+		print("still not done")
 
 		return semi
 
