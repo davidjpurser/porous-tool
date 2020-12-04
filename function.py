@@ -13,8 +13,10 @@ class function:
 			txt = self.mult
 
 		answer = "f(x) = {}x".format(txt)
-		if self.add != 0:
+		if self.add > 0:
 			answer += " + {}".format(self.add)
+		if self.add < 0:
+			answer += " - {}".format(-self.add)
 		return answer
 
 	def setMult(self,mult):

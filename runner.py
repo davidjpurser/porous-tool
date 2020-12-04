@@ -19,13 +19,23 @@ functions = [
 	function(-1,23),
 	function(-1,22),
 ]
+
+functions = [
+	function(2,0),
+	function(1,-3),
+]
+
+
+
 print(functions)
 x = 1
 target = 22
 
 semi = buildinv(x,target,functions)
 print("----------")
-print(semi)
+print("functions", functions)
+print("----------")
+print("invariant:" ,semi)
 print("----------")
 print(tabulate(buildProof(semi, functions), headers =["Set", "under", "gives", "","within"]))
 print("----------")
