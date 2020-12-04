@@ -10,11 +10,13 @@
 			}	
 			textarea {
 				width: 100%;
-				height: 300px;
+				height: 200px;
+				font-family : monospace
 			}
 
 			#output{
-				color: black
+				color: black;
+				height:300px;
 			}
 		</style>
 	</head>	
@@ -30,7 +32,10 @@
 
 <main>
 <h3>Format</h3>
-<code>startpoint target<br>
+On the first line write the start point, target and optionally whether you expect it to be reachable.
+<br>
+On subsequent lines, write the functions by writing the multiplier and the adder.<br>
+<code>startpoint target [True|False]<br>
 a b # means f(x) = ax + b<br>
 ...<br>
 a b # means f(x) = ax + b<br>
@@ -38,9 +43,13 @@ a b # means f(x) = ax + b<br>
 <br>
 <h3>Input area</h3>
 Examples:
- <button class="example btn btn-primary" data="1 0
+ <button class="example btn btn-primary" data="1 0 False
 1 -3
 2 0">MU Puzzle</button>
+ <button class="example btn btn-primary" data="2 32 True
+2 0">Power 2 yes</button>
+ <button class="example btn btn-primary" data="2 24 False
+2 0">Power 2 no</button>
 
 <br>
 
@@ -81,11 +90,11 @@ Examples:
 							val: $('#input').val()
 						}),
 						success:function(data){
-							build = "functions: " +  data['output']['functions'] + "\n" ;
-							build +=  "invariants: " + data['output']['inv']+ "\n" ;
-							build +=  "reachability: " + data['output']['reach']+ "\n" ;
-							build += "proof:\n" +  data['output']['proof']+ "\n" ;
-							$('#output').val(build);
+							// build = "functions: " +  data['output']['functions'] + "\n" ;
+							// build +=  "invariants: " + data['output']['inv']+ "\n" ;
+							// build +=  "reachability: " + data['output']['reach']+ "\n" ;
+							// build += "proof:\n" +  data['output']['proof']+ "\n" ;
+							$('#output').val(data['printed']);
 						}
 					});
 

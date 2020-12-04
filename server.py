@@ -3,7 +3,7 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from urllib.parse import urlparse
 import json
-from runner import service
+from runner import *
 
 class RequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
@@ -47,6 +47,7 @@ class RequestHandler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(json.dumps({
             'output' : again,
+            'printed' : pyprint(again),
             'method': self.command,
             'path': self.path,
             'real_path': parsed_path.query,
