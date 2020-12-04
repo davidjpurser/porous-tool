@@ -38,10 +38,12 @@ def dealWithInverters(semi, functions, period):
 	nSets = semi.getNsets()
 	#non pure inverters
 	inverters = [x for x in functions if x.isInverter()]
+	print("inverters:" ,inverters)
 	for lset in nSets:
 		for inverter in inverters:
 			second = inverter.apply(lset.getBase())
 			nextlset = linearset(second,period,-1)
+			semi.add(nextlset)
 	
 	semi = saturateZ(semi, functions)
 	return semi
@@ -147,7 +149,7 @@ def buildinv(startpoint,target, functions):
 		lset1 = linearset(startpoint,period,-1)
 		semi.add(lset1)
 		saturateZ(semi,functions)
-		return semi
+		return semi, startpoint,target,functions
 
 	# there can only be one pure inverter
 	inverter = None
@@ -178,7 +180,7 @@ def buildinv(startpoint,target, functions):
 		dir2 = linearset(lowerbound,-1,1)
 		semi.add(dir1)
 		semi.add(dir2)
-		return semi
+		return semi,  startpoint,target,functions
 
 	if any(positiveCounter) or any(negativeCounter):
 		semi = semilinear()
@@ -198,11 +200,12 @@ def buildinv(startpoint,target, functions):
 		semi = semilinear()
 		starter = linearset(startpoint,mincounter, 1)
 		semi.add(starter)
-
+		print("-------here" , semi)
 		semi = dealWithInverters(semi, functions, mincounter)
+		print("-------here" , semi)
 		#maybe everything turns out to be Z sets already
 		if not semi.includesNs():
-			return semi
+			return semi,  startpoint,target,functions
 
 		# no then we need to deal with Ns?
 
@@ -224,15 +227,15 @@ def buildinv(startpoint,target, functions):
 		counter = counters[0]
 		others = otherfunctions + counters[1:]
 		growers = [x for x in nonInverters if not x.isCounter()]
-		bound = max([x.growingFrom() for x in growers])
-		bound = max(bound, startpoint) + 1
+		bound = max([x.growingFrom() for x in growers] + [startpoint]) +1
+		# bound = max(bound, startpoint) + 1
 		if counter.apply(startpoint) - startpoint > 0:
 			semi = positiveCounters(semi, startpoint, bound, counter, others)
 		else: #negative counters
 			bound = - bound
 			semi = positiveCounters(semi, startpoint, bound, counter, others)
 
-		return semi
+		return semi,  startpoint,target,functions
 
 	print("I don't know how to handle this case")
 	return None

@@ -18,6 +18,37 @@ def buildProof(semi, functions):
 			inducts = [x for x in semi.lsets if x.containsObject(secondls)]
 			if len(inducts ) == 0:
 				print("--------- problem!")
-			data.append([ls,x ,secondls,"⊆", inducts[0]])
+			else:
+				data.append([ls,x ,secondls,"⊆", inducts[0]])
 	return data
 
+	#you had better be sure
+def buildReachProof(start, target, semi, functions):
+	
+	if not semi.containsFuzz(linearset(target)):
+		# you should never have run this.
+		return False
+	seen = set()
+	before = {}
+
+	Q = [start]
+	while len(Q) > 0:
+		top = Q.pop(0)
+		for x in functions:
+			next = x.apply(top)
+			if next not in seen:
+				seen.add(next)
+				Q.append(next)
+				before[next] = (top, x)
+				if next == target:
+					output = []
+					here = next
+					while here != start:
+						output.insert(0, here)
+						output.insert(0, before[here][1])
+						here = before[here][0]
+
+					output.insert(0,here)
+					return output
+	#this should not happen if its correct
+	return None

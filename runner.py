@@ -7,6 +7,7 @@ from linearset import *
 from helpers import *
 from functools import reduce
 from proof import buildProof
+from proof import buildReachProof
 from math import gcd
 
 
@@ -15,23 +16,28 @@ from tool import buildinv
 def appen(txt, *vartuple):
 	vars = list(vartuple)
 	txt = txt + " ".join([str(x) for x in vars]) 
-	print(txt)
 	txt += "\n"
 	return txt 
 
 def pyprint(data):
 	txt = ""
 	txt = appen(txt, "----------")
-	txt = appen(txt, "functions", data['functions'])
+	txt = appen(txt, "start:", data['start'],'target:', data['target'], "functions:", data['functions'])
 	txt = appen(txt, "----------")
 	txt = appen(txt, "invariant:" ,data['inv'])
 	txt = appen(txt, "----------")
+	txt = appen(txt, 'reachability:',  "reachable" if data['reachable'] else "unreachable")
 	if 'expectation' in data:
-		txt = appen(txt, 'expecting:', "reachable" if data['expectation'] == "True" else "unreachable", 'Passed:', data['passtest'])
+		txt = appen(txt, 'expecting:', "reachable" if data['expectation'] == "True" else "unreachable")
+		txt = appen(txt, 'Expectation=Reality:', data['passtest'])
 	txt = appen(txt, data['reach'])
+	if 'por' in data:
+		txt = appen(txt, 'proof of reachability:', data['por'])
 	txt = appen(txt, "----------")
+	txt = appen(txt, "Proof of invariance")
 	txt = appen(txt, data['proof'])
 	txt = appen(txt, "----------")
+	print(txt)
 	return txt
 
 
@@ -56,23 +62,29 @@ def service(data):
 	return manual(start,target,functions,expectation)
 
 def manual(start,target,functions,expectation = None):
-	semi = buildinv(start,target,functions)
+	semi, start,target,functions = buildinv(start,target,functions)
 
 
 	passtest = semi.containsFuzz(linearset(target)) == expectation
 	print(semi.containsFuzz(linearset(target)) , expectation)
-	if semi.containsFuzz(linearset(target)):
-		reach = "target: "  + str(target) +  " is a member of " +  str(semi.getContainsFuzz(linearset(target))) + " so can be reached"
-	else:
-		reach = "target: " + str(target) +  " is not in invariant, so it cannot be reached"
 
 	data = {
-		
+		'start': start,
+		'target': target,
 		'functions' : str(functions),
 		'inv' :str(semi),
 		'proof': tabulate(buildProof(semi, functions), headers =["Set", "under", "gives", "","within"]),
-		'reach': reach
 	}
+	if semi.containsFuzz(linearset(target)):
+		reach = "target: "  + str(target) +  " is a member of " +  str(semi.getContainsFuzz(linearset(target))) + " and can be reached"
+		por = " -> ".join([str(x) for x in buildReachProof(start,target,semi,functions)])
+		data['por']=por
+		data['reachable'] = True
+	else:
+		data['reachable'] = False
+		reach = "target: " + str(target) +  " is not in invariant, so it cannot be reached"
+
+	data['reach']= reach
 	if expectation!=None:
 		data['passtest'] = str(passtest)
 		data['expectation'] = str(expectation)
