@@ -14,17 +14,14 @@ from tool import buildinv
 
 functions = [
 	function(15,-5),
-	function(2,0),
-	function(30,0),
-	function(-1,23),
-	function(-1,22),
+	function(-1,5),
+	function(-1,-5),
 ]
 
 functions = [
 	function(2,0),
 	function(1,-3),
 ]
-
 
 
 print(functions)
@@ -36,6 +33,11 @@ print("----------")
 print("functions", functions)
 print("----------")
 print("invariant:" ,semi)
+print("----------")
+if semi.containsFuzz(linearset(target)):
+	print("target:" ,target, "is a member of", semi.getContainsFuzz(linearset(target)))
+else:
+	print("target:" ,target, "is not in invariant")
 print("----------")
 print(tabulate(buildProof(semi, functions), headers =["Set", "under", "gives", "","within"]))
 print("----------")

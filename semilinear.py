@@ -51,3 +51,9 @@ class semilinear:
 			if x.containsObject(lset):
 				return True
 		return False
+
+	def getContainsFuzz(self, lset):
+		for x in self.lsets:
+			if x.containsObject(lset):
+				return x
+		return False
