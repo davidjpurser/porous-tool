@@ -159,6 +159,13 @@ def buildinv(startpoint,target, functions):
 	nonInverters = [x for x in functions if not x.isPureInverter()]
 	growStatus = [x.isGrower() for x in nonInverters]
 
+	if len(nonInverters)  == 0:
+		# todo!
+		semi = semilinear()
+		semi.add(linearset(startpoint))
+		semi.add(linearset(inverter.apply(startpoint)))
+		return semi, startpoint,target,functions
+
 	# all nonInverters growers
 	if all(growStatus):
 		semi = semilinear()
