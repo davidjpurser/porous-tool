@@ -22,10 +22,10 @@ class ModuloTree:
 
 		Q = [x]
 		seen = set(Q)
-		#BFS for something in the same modulo class to the right.
+		#BFS for something in the same modulo class to the right or left depending on the direction of bound
 		while len(Q) > 0:
 			z = Q.pop(0)
-			print("checking", x,z,z%self.modulo,myclass, "bound", bound)
+			# print("checking", x,z,z%self.modulo,myclass, "bound", bound)
 			if ((bound> 0 and z > x) or (bound< 0 and z < x)) and z %self.modulo == myclass:
 				print("path from",x, "to",z, "class", myclass)
 				return True
@@ -35,5 +35,5 @@ class ModuloTree:
 					if y not in seen:
 						seen.add(y)
 						Q.append(y)
-						print("appending ", y)
+						# print("appending ", y)
 		return False

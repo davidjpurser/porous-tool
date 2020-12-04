@@ -65,5 +65,7 @@ class function:
 	def isIdentity(self):
 		return self.isEqual(function(1,0))
 
+	def getReverseFunction(self):
+		return function(self.mult, -self.add)
 
 

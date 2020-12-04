@@ -57,15 +57,12 @@ def saturateZ(semi, functions):
 				b = top.getBase()
 				next = f.apply(b)
 				myset = linearset(next,period,-1)
-				print(next, linearset(next,period,-1))
 				if not semi.contains(myset):
+					print("adding ",next, linearset(next,period,-1))
 					semi.add(myset)
 					Q.append(myset)
 	return semi
 
-def saturateZs(semi, lset1, functions):
-	semi.add(lset1)
-	return saturateZ(semi,functions)
 
 
 
@@ -73,38 +70,38 @@ def positiveCounters(semi, startpoint, bound, counter, others):
 
 	Q = [startpoint]
 	T = ModuloTree(counter.add)
-	print(T)
+	# print(T)
 
 	while len(Q) > 0:
 		p = Q.pop(0)
-		print(p, Q)
+		# print(p, Q)
 		for f in others:
 			next = f.apply(p)
 			print(p, f , "=" , next)
 			if (bound > 0 and next > bound) or (bound< 0 and next < bound):
 				#too big in the wrong direction
-				print(next, "to big")
+				# print(next, "to big")
 				pass
 			elif semi.containsFuzz(linearset(next,counter.add,-1)):
-				print(next, "already")
+				# print(next, "already")
 				#already have a z linear set for this guy
 				pass
 			else:
-				print(next, "work")
+				# print(next, "work")
 				T.edge(next,p)
 				if next not in Q:
 					Q.append(next)
-				print(Q,T)
+				# print(Q,T)
 				semi.add(linearset(next,counter.add,1))
 				if T.search(next,bound):
 					newthing = linearset(next,counter.add,-1)
-					print("activating!", newthing)
+					print("found a loop, adding new Z set", newthing, "and starting again")
 					semi.add(newthing)
 					semi = dealWithInverters(semi, others, counter.add)
 					return positiveCounters(semi, startpoint, bound, counter, others)
 				else:
 					# didn't find anything in the search, keep looking
-					print("continue workingc")
+					# print("continue workingc")
 					pass
 	return semi
 
@@ -112,6 +109,14 @@ def positiveCounters(semi, startpoint, bound, counter, others):
 
 def buildinv(startpoint,target, functions):
 	# strip useless identity function
+
+	if startpoint < 0:
+		newstartpoint = -startpoint
+		newtarget = -target
+		newfunctions = [x.getReverseFunction() for x in functions]
+		print("starting at negative, reversing everything", newstartpoint,newtarget,newfunctions)
+		return buildinv(newstartpoint,newtarget,newfunctions)
+
 
 	x0 = set([startpoint])
 	functions = [x for x in functions if not x.isIdentity()]
@@ -127,8 +132,8 @@ def buildinv(startpoint,target, functions):
 		a = inverters[0].compose(inverters[1])
 		b = inverters[1].compose(inverters[0])
 		print("there are counters! in both directions", a,b)
-		print("adding both", a,b)
 		functionsplus = functions + [a,b]
+		print("new function set", functionsplus, "and starting again")
 		return buildinv(startpoint,target, functionsplus)
 
 	# bi-directional counters
@@ -140,11 +145,11 @@ def buildinv(startpoint,target, functions):
 		print(period)
 		semi = semilinear()
 		lset1 = linearset(startpoint,period,-1)
-		saturateZs(semi,lset1,functions)
-		print(semi)
+		semi.add(lset1)
+		saturateZ(semi,functions)
 		return semi
 
-	# there can only be one inverter
+	# there can only be one pure inverter
 	inverter = None
 	for x in functions:
 		if x.isPureInverter():
@@ -173,7 +178,6 @@ def buildinv(startpoint,target, functions):
 		dir2 = linearset(lowerbound,-1,1)
 		semi.add(dir1)
 		semi.add(dir2)
-		print(semi)
 		return semi
 
 	if any(positiveCounter) or any(negativeCounter):
@@ -196,10 +200,11 @@ def buildinv(startpoint,target, functions):
 		semi.add(starter)
 
 		semi = dealWithInverters(semi, functions, mincounter)
+		#maybe everything turns out to be Z sets already
 		if not semi.includesNs():
 			return semi
 
-		print("need to deal with counters")
+		# no then we need to deal with Ns?
 
 		# saturate in the good direction
 		period = starter.getPeriod()
