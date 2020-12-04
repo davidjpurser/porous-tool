@@ -1,3 +1,4 @@
+import time
 import math
 from function import *
 from semilinear import *
@@ -28,11 +29,19 @@ def buildReachProof(start, target, semi, functions):
 	if not semi.containsFuzz(linearset(target)):
 		# you should never have run this.
 		return False
+	print("building reachability graph")
+
 	seen = set()
 	before = {}
 
 	Q = [start]
+
+	start_time = time.time()
+
 	while len(Q) > 0:
+		if (time.time() - start_time) > 30:
+			print("giving up")
+			return ['sorry it took too long to build']
 		top = Q.pop(0)
 		for x in functions:
 			next = x.apply(top)
