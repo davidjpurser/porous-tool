@@ -10,7 +10,7 @@ def applySet(st, functions):
 
 
 def saturateTo(st, functions, C):
-	
+	print("saturating", st, 'to', C)
 	while True:
 		ns = applySet(st, functions)
 		ns = { x  for x in ns if abs(x) < C}	

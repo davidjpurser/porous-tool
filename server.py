@@ -17,33 +17,23 @@ class RequestHandler(BaseHTTPRequestHandler):
         return
 
     def do_POST(self):
-        print('hello')
+        print('received a request')
         content_len = int(self.headers.get('content-length'))
-        print(content_len)
         post_body = self.rfile.read(content_len)
-        print(post_body)
         if content_len > 0:
             data = json.loads(post_body)
         else: 
             data = {}
-        print(data)
 
-        again = service(data)
+        output = service(data)
 
 
         parsed_path = urlparse(self.path)
         self.send_response(200)
         self.end_headers()
         self.wfile.write(json.dumps({
-            'output' : again,
-            'printed' : pyprint(again),
-            'method': self.command,
-            'path': self.path,
-            'real_path': parsed_path.query,
-            'query': parsed_path.query,
-            'request_version': self.request_version,
-            'protocol_version': self.protocol_version,
-            'body': data
+            'output' : output,
+            'printed' : pyprint(output),
         }).encode())
         return
 

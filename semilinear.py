@@ -26,6 +26,8 @@ class semilinear:
 	def getNsets(self):
 		return [x for x in self.lsets if x.type == 1 and x.periods != None]
 
+	def getSsets(self):
+		return [x.base for x in self.lsets if x.periods == None]
 
 	def __repr__(self):
 
@@ -57,3 +59,61 @@ class semilinear:
 			if x.containsObject(lset):
 				return x
 		return False
+
+
+	def reduction(self):
+		print("reducing")
+		Zs = self.getZsets()
+		Ns = self.getNsets()
+		Ss = set(self.getSsets())
+
+		# can ignore Zs
+		if len(Ns) > 0:
+			period = abs(Ns[0].periods)
+		
+		print("period", period)
+		for i in range(period):
+			print("modulo", i)
+			mx = None
+			mn = None
+			for x in Ns:
+				if x.periods == period:
+					mx = x.base
+				if x.periods == - period:
+					mn = x.base
+
+			print(mn,mx)
+			if mx:
+				while True:
+					mxm = mx - period
+					if mxm in Ss:
+						mx = mxm
+					else: 
+						break
+
+			if mn:
+				while True:
+					mnm = mn + period
+					if mnm in Ss:
+						mn = mnm
+					else: 
+						break
+			print(mn,mx)
+			
+			if mn and mx and mn >= mx:
+				self.add(linearset(mn,period,-1))
+			elif mx:
+				self.add(linearset(mx, period,1))
+			elif mn:
+				self.add(linearset(mn, -period,1))
+
+		print("reductions")
+		print("Z", len(Zs), len(self.getZsets()))
+		print("N", len(Ns), len(self.getNsets()))
+		print("S", len(Ss), len(self.getSsets()))
+
+
+
+
+
+

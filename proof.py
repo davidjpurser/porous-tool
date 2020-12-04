@@ -8,6 +8,7 @@ from functools import reduce
 
 def buildProof(semi, functions):
 	data= []
+	print("building proof", len(semi.lsets))
 	for ls in semi.lsets:
 		for x in functions:
 			if ls.periods:
@@ -21,6 +22,8 @@ def buildProof(semi, functions):
 				print("--------- problem!")
 			else:
 				data.append([ls,x ,secondls,"⊆", inducts[0]])
+
+	print("proof built")
 	return data
 
 	#you had better be sure

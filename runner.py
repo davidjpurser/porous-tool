@@ -64,9 +64,11 @@ def service(data):
 def manual(start,target,functions,expectation = None):
 	semi, start,target,functions = buildinv(start,target,functions)
 
+	print(semi)
+	semi.reduction()
 
 	passtest = semi.containsFuzz(linearset(target)) == expectation
-	print(semi.containsFuzz(linearset(target)) , expectation)
+	print('reality:', semi.containsFuzz(linearset(target)) , 'expections:', expectation)
 
 	data = {
 		'start': start,
