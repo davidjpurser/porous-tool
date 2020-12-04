@@ -62,6 +62,7 @@ class semilinear:
 
 
 	def reduction(self):
+		return
 		print("reducing")
 		Zs = self.getZsets()
 		Ns = self.getNsets()

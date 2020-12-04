@@ -86,7 +86,10 @@
          				// build +=  "reachability: " + data['output']['reach']+ "\n" ;
          				// build += "proof:\n" +  data['output']['proof']+ "\n" ;
          				$('#output').val(data['printed']);
-         			}
+         			},
+                  error:function(){
+                    $('#output').val('failed, try again'); 
+                  }
          		});
          
          
