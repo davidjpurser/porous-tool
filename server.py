@@ -8,23 +8,12 @@ from runner import *
 class RequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         parsed_path = urlparse(self.path)
-        if self.path == "/index.html":
-            with open('index.html', 'rb') as reader:
-                self.send_response(200)
-                self.end_headers()
-                self.wfile.write(reader.read())
-                return
+        with open('index.html', 'rb') as reader:
+            self.send_response(200)
+            self.end_headers()
+            self.wfile.write(reader.read())
+            return
 
-        self.send_response(200)
-        self.end_headers()
-        self.wfile.write(json.dumps({
-            'method': self.command,
-            'path': self.path,
-            'real_path': parsed_path.query,
-            'query': parsed_path.query,
-            'request_version': self.request_version,
-            'protocol_version': self.protocol_version
-        }).encode())
         return
 
     def do_POST(self):
