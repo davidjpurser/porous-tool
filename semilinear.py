@@ -30,10 +30,13 @@ class semilinear:
 		return [x.base for x in self.lsets if x.periods == None]
 
 	def __repr__(self):
-
 		if not self.lsets: #empty
 			return "{}"
-		return " U ".join([str(x) for x in self.lsets])			
+		things = self.getZsets() + self.getNsets() 
+		singles=  set(self.getSsets())
+		if len(singles) > 0:
+			things = things +[singles]
+		return " U ".join([str(x) for x in things])			
 
 
 	def addPoints(self, points):
