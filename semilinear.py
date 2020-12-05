@@ -36,7 +36,7 @@ class semilinear:
 		singles=  set(self.getSsets())
 		if len(singles) > 0:
 			things = things +[singles]
-		return " U ".join([str(x) for x in things])			
+		return " ∪ ".join([str(x) for x in things])			
 
 
 	def addPoints(self, points):
