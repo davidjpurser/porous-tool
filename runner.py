@@ -2,14 +2,14 @@ from tabulate import tabulate
 import math
 from function import *
 from tree import *
+from instance import *
 from semilinear import *
 from linearset import *
-from helpers import *
 from functools import reduce
 from proof import buildProof
 from proof import buildReachProof
 from math import gcd
-
+from errors import *
 
 from tool import buildinv
 
@@ -25,6 +25,9 @@ def pyprint(data):
 	txt = appen(txt, "start:", data['start'],'target:', data['target'], "functions:", data['functions'])
 	txt = appen(txt, "----------")
 	txt = appen(txt, "invariant:" ,data['inv'])
+	if 'errors' in data:
+		txt = appen(txt, "----------")
+		txt = appen(txt, "errors:" ,data['errors'])
 	txt = appen(txt, "----------")
 	txt = appen(txt, 'reachability:',  "reachable" if data['reachable'] else "unreachable")
 	if 'expectation' in data:
@@ -47,6 +50,8 @@ def service(data):
 	print(x)
 	functions = []
 	for i, line in enumerate(x.splitlines()):
+		if line.startswith("ENDS"):
+			break
 		print(line)
 		split = line.split(" ")
 		if i == 0:
@@ -59,11 +64,17 @@ def service(data):
 		else:
 			functions.append(function(int(split[0]),int(split[1])))
 	print(start,target,functions)
-	return manual(start,target,functions,expectation)
+	inst = instance(start,target,functions)
+	inst.setExp(expectation)
+	return manual(inst)
 
-def manual(start,target,functions,expectation = None):
+
+
+def manual(inst):
+	start,target,functions,expectation = inst.asTuple()
 	semi, start,target,functions = buildinv(start,target,functions)
 
+	errors = Errors()
 	print(semi)
 	semi.reduction()
 
@@ -75,11 +86,12 @@ def manual(start,target,functions,expectation = None):
 		'target': target,
 		'functions' : str(functions),
 		'inv' :str(semi),
-		'proof': tabulate(buildProof(semi, functions), headers =["Set", "under", "gives", "","within"]),
+		'semi': semi,
+		'proof': tabulate(buildProof(semi, functions, errors), headers =["Set", "under", "gives", "","within"]),
 	}
 	if semi.containsFuzz(linearset(target)):
 		reach = "target: "  + str(target) +  " is a member of " +  str(semi.getContainsFuzz(linearset(target))) + " and can be reached"
-		por = " -> ".join([str(x) for x in buildReachProof(start,target,semi,functions)])
+		por = " -> ".join([str(x) for x in buildReachProof(start,target,semi,functions, errors)])
 		data['por']=por
 		data['reachable'] = True
 	else:
@@ -90,6 +102,8 @@ def manual(start,target,functions,expectation = None):
 	if expectation!=None:
 		data['passtest'] = str(passtest)
 		data['expectation'] = str(expectation)
+	if errors.hasErrors():
+		data['errors'] = str(errors.getErrors())
 	print(data)
 	return data
 
@@ -123,5 +137,5 @@ if __name__ == "__main__":
 		print(functions)
 		x = 1
 		target = 22
-		pyprint(manual(x,target,functions))
+		pyprint(manual(instance(x,target,functions)))
 		

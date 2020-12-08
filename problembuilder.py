@@ -1,6 +1,17 @@
 from function import *
 from random import randint
 from instance import *
+from linearset import * 
+import runner
+
+
+def saveAs(name, inst, type,data = None):
+	with open("problems/" + type + "/" + name +".genproblem", 'w') as f:
+		f.write(str(inst))
+		if data != None:
+			f.write("ENDS")
+			f.write(runner.pyprint(data))
+
 
 def getRand(bot,top):
 	if bot > top:
@@ -60,14 +71,32 @@ for x in list(powerset(types)):
 	if len(functionTypes) == 0:
 		continue
 
+	nt = ""
+	for t in types:
+		if t in functionTypes:
+			nt += "1"
+		else:
+			nt += "0"
+
 	functions = []
 	print("------")
 	for x in functionTypes:
 		functions.append(x(max))
 
 
-	ins = instance(getRand(1,max),getRand(1,4*max),functions)
+	inst = instance(getRand(1,max),getRand(1,4*max),functions)
+	data = runner.manual(inst)
+	print(data)
+
 	
-	print(ins)
+	if 'errors' in data:
+		name = nt + "-" + inst.getName()
+		saveAs(name, inst, "errors", data)
+	else:
+		inst.setExp(data['semi'].containsFuzz(linearset(inst.target)))
+		name = nt + "-" + inst.getName()
+		saveAs(name, inst, "good",data)
+	runner.pyprint(data)
+	print(inst)
 
 

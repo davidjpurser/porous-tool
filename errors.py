@@ -1,4 +1,11 @@
-class errors:
+
+def appen(txt, *vartuple):
+	vars = list(vartuple)
+	txt = txt + " ".join([str(x) for x in vars]) 
+	txt += "\n"
+	return txt 
+
+class Errors:
 	def __init__(self):
 		self.errors = []
 

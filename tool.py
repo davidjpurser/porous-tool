@@ -3,7 +3,6 @@ from function import *
 from tree import *
 from semilinear import *
 from linearset import *
-from helpers import *
 from functools import reduce
 from math import gcd
 

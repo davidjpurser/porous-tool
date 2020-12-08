@@ -3,10 +3,11 @@ import math
 from function import *
 from semilinear import *
 from linearset import *
-from helpers import *
 from functools import reduce
+from errors import *
 
-def buildProof(semi, functions):
+
+def buildProof(semi, functions,errors = None):
 	data= []
 	print("building proof", len(semi.lsets))
 	for ls in semi.lsets:
@@ -19,6 +20,8 @@ def buildProof(semi, functions):
 
 			inducts = [x for x in semi.lsets if x.containsObject(secondls)]
 			if len(inducts ) == 0:
+				if errors:
+					errors.error(appen("",[ls,function,secondls, "not found"]))
 				print("--------- problem!")
 			else:
 				data.append([ls,x ,secondls,"⊆", inducts[0]])
@@ -27,10 +30,12 @@ def buildProof(semi, functions):
 	return data
 
 	#you had better be sure
-def buildReachProof(start, target, semi, functions):
+def buildReachProof(start, target, semi, functions,errors = None):
 	
 	if not semi.containsFuzz(linearset(target)):
 		# you should never have run this.
+		if errors:
+				errors.error("Target not in semi-linear, you shouldn't have run this ")
 		return False
 	print("building reachability graph")
 
@@ -40,10 +45,12 @@ def buildReachProof(start, target, semi, functions):
 	Q = [start]
 
 	start_time = time.time()
-
+	timeout = 30
 	while len(Q) > 0:
-		if (time.time() - start_time) > 30:
+		if (time.time() - start_time) > timeout:
 			print("giving up")
+			if errors:
+				errors.error("Reachability believed but took longer than " + str(timeout))
 			return ['sorry it took too long to build']
 		top = Q.pop(0)
 		for x in functions:
