@@ -34,6 +34,28 @@ assert(not same_dir(4, -3,8))
 assert(not same_dir(4, 3,8))
 
 
+
+def applySet(st, functions):
+	ns = set(st)
+	for f in functions:
+		for s in st:
+			ns.add(f.apply(s))
+
+	return ns
+
+
+def saturateTo(st, functions, C):
+	print("saturating", st, 'to', C)
+	while True:
+		ns = applySet(st, functions)
+		ns = { x  for x in ns if abs(x) < C}	
+		# print(ns)
+		if ns == st: 
+			return ns
+		st = ns
+
+
+
 def dealWithInverters(semi, functions, period):
 	nSets = semi.getNsets()
 	#non pure inverters
@@ -110,7 +132,6 @@ def positiveCounters(semi, startpoint, bound, counter, others):
 
 
 def buildinv(startpoint,target, functions):
-	# strip useless identity function
 
 	if startpoint < 0:
 		newstartpoint = -startpoint
@@ -120,7 +141,9 @@ def buildinv(startpoint,target, functions):
 		return buildinv(newstartpoint,newtarget,newfunctions)
 
 
-	x0 = set([startpoint])
+	
+
+	# strip useless identity function
 	functions = [x for x in functions if not x.isIdentity()]
 	print(functions)
 	
@@ -180,7 +203,7 @@ def buildinv(startpoint,target, functions):
 			else:
 				lowerbound += inverter.add
 
-		start = saturateTo(x0, functions, max(-lowerbound, upperbound))
+		start = saturateTo(set([startpoint]), functions, max(-lowerbound, upperbound))
 		start = [x for x in start if x<=upperbound and x>=lowerbound]
 		semi.addPoints(start)
 		dir1 = linearset(upperbound,1,1)
