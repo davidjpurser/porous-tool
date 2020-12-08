@@ -68,4 +68,5 @@ class function:
 	def getReverseFunction(self):
 		return function(self.mult, -self.add)
 
-
+	def simplestr(self):
+		return str(self.mult) + " " + str(self.add)
