@@ -3,7 +3,8 @@ from random import randint
 from instance import *
 from linearset import * 
 import runner
-
+import csv
+import random
 
 def saveAs(name, inst, type,data = None):
 	with open("problems/" + type + "/" + name +".genproblem", 'w') as f:
@@ -66,36 +67,52 @@ generateNegPureInverter,
 generateNullInverter]
 
 max = 50
-for x in list(powerset(types)):
+ordering = list(powerset(types))
+random.shuffle(list(powerset(types)))
+print(ordering)
+for x in ordering:
 	functionTypes = (list(x))
 	if len(functionTypes) == 0:
 		continue
 
+	functions = []
 	nt = ""
+	stcode = ""
 	for t in types:
 		if t in functionTypes:
-			nt += "1"
+			number = getRand(1,4)
+			nt += str(number)
+			stcode += "1"
+
+			for i in range(number):
+				functions.append(t(max))
 		else:
 			nt += "0"
-
-	functions = []
-	print("------")
-	for x in functionTypes:
-		functions.append(x(max))
-
+			stcode += "0"
 
 	inst = instance(getRand(1,max),getRand(1,4*max),functions)
 	data = runner.manual(inst)
 	print(data)
 
-	
+
 	if 'errors' in data:
-		name = nt + "-" + inst.getName()
+		name = inst.getName(nt)
 		saveAs(name, inst, "errors", data)
+		errors = str(data['errors'])
 	else:
-		inst.setExp(data['semi'].containsFuzz(linearset(inst.target)))
+		inst.setExp(data['inv'].containsFuzz(linearset(inst.target)))
 		name = nt + "-" + inst.getName()
 		saveAs(name, inst, "good",data)
+		errors = str([])
+
+	with open('document.csv','a') as f:
+		writer = csv.writer(f)
+		row = [stcode,nt,name, data['reachable'],'errors' in data,errors]
+		for x in ['invariant', 'proofOfInvariant','proofOfReachability']:
+			row.append(f"{data['time'][x]:.9f}" if x in data['time'] else -1)
+		writer.writerow(row)
+
+
 	runner.pyprint(data)
 	print(inst)
 

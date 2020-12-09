@@ -29,5 +29,7 @@ class instance:
 		if not prefix:
 			prefix= ""
 		else:
-			prefix +=" "
-		return prefix + self.__repr__().replace("\n","_")
+			prefix +="_"
+		if self.exp is not None:
+			prefix +=  str(self.exp) + "_"
+		return prefix +  self.__repr__().replace(" ","_").replace("\n","_")

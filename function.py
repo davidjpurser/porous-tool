@@ -48,12 +48,15 @@ class function:
 	def isGrower(self):
 		return abs(self.mult) > 1
 
-	def growingFrom(self):
+	def growingFrom(self, extra=0):
 		#only makes sense if not counter
-		return int(abs(self.add)/(abs(self.mult)-1))
+		return int((abs(self.add) + abs(extra))/(abs(self.mult)-1))
 
 	def isEqual(self, fun):
 		return self.mult == fun.mult and self.add == fun.add
+
+	def __eq__(self,fun):
+		return self.isEqual(fun)
 
 	def compose(self, fun):
 		a = self.mult

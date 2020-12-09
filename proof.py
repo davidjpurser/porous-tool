@@ -21,7 +21,7 @@ def buildProof(semi, functions,errors = None):
 			inducts = [x for x in semi.lsets if x.containsObject(secondls)]
 			if len(inducts ) == 0:
 				if errors:
-					errors.error(appen("",[ls,function,secondls, "not found"]))
+					errors.error(appen("",[ls,x,secondls, "not found"]))
 				print("--------- problem!")
 			else:
 				data.append([ls,x ,secondls,"⊆", inducts[0]])
@@ -60,14 +60,17 @@ def buildReachProof(start, target, semi, functions,errors = None):
 				Q.append(next)
 				before[next] = (top, x)
 				if next == target:
+					print("target found, just need to build the route")
 					output = []
 					here = next
 					while here != start:
-						output.insert(0, here)
-						output.insert(0, before[here][1])
+						output.append(here)
+						output.append(before[here][1])
 						here = before[here][0]
 
-					output.insert(0,here)
+					output.append(here)
+					output.reverse()
+					print("target found, route made")
 					return output
 	#this should not happen if its correct
 	return None

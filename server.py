@@ -5,6 +5,15 @@ from urllib.parse import urlparse
 import json
 from runner import *
 
+import json
+def is_jsonable(x):
+    try:
+        json.dumps(x)
+        return True
+    except:
+        return False
+
+
 class RequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         parsed_path = urlparse(self.path)
@@ -26,13 +35,12 @@ class RequestHandler(BaseHTTPRequestHandler):
             data = {}
 
         output = service(data)
-
+        # output = {x:output[x] for x in output if is_jsonable(output[x])}
 
         parsed_path = urlparse(self.path)
         self.send_response(200)
         self.end_headers()
         self.wfile.write(json.dumps({
-            'output' : output,
             'printed' : pyprint(output),
         }).encode())
         return

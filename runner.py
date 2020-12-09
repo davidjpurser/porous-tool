@@ -1,3 +1,4 @@
+import time
 from tabulate import tabulate
 import math
 from function import *
@@ -19,27 +20,40 @@ def appen(txt, *vartuple):
 	txt += "\n"
 	return txt 
 
+def breaker(txt):
+	return appen(txt, "-----------------")
+
 def pyprint(data):
 	txt = ""
-	txt = appen(txt, "----------")
+	txt = breaker(txt)
 	txt = appen(txt, "start:", data['start'],'target:', data['target'], "functions:", data['functions'])
-	txt = appen(txt, "----------")
+	txt = breaker(txt)
 	txt = appen(txt, "invariant:" ,data['inv'])
 	if 'errors' in data:
-		txt = appen(txt, "----------")
+		txt = breaker(txt)
 		txt = appen(txt, "errors:" ,data['errors'])
-	txt = appen(txt, "----------")
+	txt = breaker(txt)
 	txt = appen(txt, 'reachability:',  "reachable" if data['reachable'] else "unreachable")
-	if 'expectation' in data:
-		txt = appen(txt, 'expecting:', "reachable" if data['expectation'] == "True" else "unreachable")
-		txt = appen(txt, 'Expectation=Reality:', data['passtest'])
-	txt = appen(txt, data['reach'])
-	if 'por' in data:
+	
+
+	if data['reachable']:
+		txt = appen(txt, 'target', data['target'], 'in', data['targetmember'], 'reachable')	
 		txt = appen(txt, 'proof of reachability:', data['por'])
-	txt = appen(txt, "----------")
+	else: 
+		txt = appen(txt, 'target', data['target'], 'not in invariant', 'unreachable')	
+
+	if 'expectation' in data:
+		txt = appen(txt, 'expecting:', "reachable" if data['expectation'] == True else "unreachable")
+		txt = appen(txt, 'Expectation=Reality:', data['passtest'])
+
+
+	txt = breaker(txt)
 	txt = appen(txt, "Proof of invariance")
 	txt = appen(txt, data['proof'])
-	txt = appen(txt, "----------")
+	txt = breaker(txt)
+	for x in data['time']:
+		txt = appen(txt, 'time', x, f"{data['time'][x]:.9f}")
+	txt = breaker(txt)
 	print(txt)
 	return txt
 
@@ -72,36 +86,49 @@ def service(data):
 
 def manual(inst):
 	start,target,functions,expectation = inst.asTuple()
+
+	start_time = time.time()
 	semi, start,target,functions = buildinv(start,target,functions)
+	end_time = time.time()
 
 	errors = Errors()
 	print(semi)
 	semi.reduction()
 
-	passtest = semi.containsFuzz(linearset(target)) == expectation
 	print('reality:', semi.containsFuzz(linearset(target)) , 'expections:', expectation)
 
 	data = {
 		'start': start,
 		'target': target,
-		'functions' : str(functions),
-		'inv' :str(semi),
-		'semi': semi,
-		'proof': tabulate(buildProof(semi, functions, errors), headers =["Set", "under", "gives", "","within"]),
+		'functions': functions,
+		'instance' : instance,
+		'inv' : semi,
+		'time': {
+			'invariant': end_time - start_time
+		}
 	}
-	if semi.containsFuzz(linearset(target)):
-		reach = "target: "  + str(target) +  " is a member of " +  str(semi.getContainsFuzz(linearset(target))) + " and can be reached"
-		por = " -> ".join([str(x) for x in buildReachProof(start,target,semi,functions, errors)])
-		data['por']=por
-		data['reachable'] = True
-	else:
-		data['reachable'] = False
-		reach = "target: " + str(target) +  " is not in invariant, so it cannot be reached"
+	start_time = time.time()
+	data['proof'] =  tabulate(buildProof(semi, functions, errors), headers =["Set", "under", "gives", "","within"])
+	end_time = time.time()
+	data['time']['proofOfInvariant'] = end_time - start_time
 
-	data['reach']= reach
+
+	data['reachable'] = semi.containsFuzz(linearset(target))
+
+	if semi.containsFuzz(linearset(target)):
+		data['targetmember'] = semi.getContainsFuzz(linearset(target))
+		start_time = time.time()
+		reachproof = buildReachProof(start,target,semi,functions, errors)
+		end_time = time.time()
+		if len(reachproof) > 500:
+			data['por']= " -> ".join([str(x) for x in reachproof[:5] + [".... stuff ...."] + reachproof[-5:]])
+		else:
+			data['por']= " -> ".join([str(x) for x in reachproof])
+		data['time']['proofOfReachability'] = end_time - start_time
+
 	if expectation!=None:
-		data['passtest'] = str(passtest)
-		data['expectation'] = str(expectation)
+		data['passtest'] = semi.containsFuzz(linearset(target)) == expectation
+		data['expectation'] = expectation
 	if errors.hasErrors():
 		data['errors'] = str(errors.getErrors())
 	print(data)
@@ -120,6 +147,7 @@ if __name__ == "__main__":
 			print(stuff)
 			data['val']  = stuff
 			pyprint(service(data))		
+		
 
 	else:
 		functions = [

@@ -145,6 +145,13 @@ def buildinv(startpoint,target, functions):
 	# strip useless identity function
 	functions = [x for x in functions if not x.isIdentity()]
 	print(functions)
+
+	#remove duplicates
+	uniquefunctions = []
+	for x in functions:
+		if x not in uniquefunctions:
+			uniquefunctions.append(x)
+	functions = uniquefunctions
 	
 	positiveCounter = [x.isPositiveCounter() for x in functions]
 	negativeCounter = [x.isNegativeCounter() for x in functions]
@@ -191,16 +198,21 @@ def buildinv(startpoint,target, functions):
 	# all nonInverters growers
 	if all(growStatus):
 		semi = semilinear()
-		growPoints =[x.growingFrom() for x in nonInverters]
+		if inverter is not None:
+			invertadd = inverter.add
+		else:
+			invertadd = 0
+
+		growPoints =[x.growingFrom(invertadd) for x in nonInverters]
 		growPoint = max(growPoints)
 		growPoint = max(growPoint, target+2)
+		print("-------------", growPoint)
 		lowerbound = -growPoint
 		upperbound = growPoint
-		if inverter != None:
-			if inverter.add >= 0:
-				upperbound += inverter.add
-			else:
-				lowerbound += inverter.add
+		if invertadd >= 0:
+			upperbound += invertadd
+		else:
+			lowerbound += invertadd
 
 		start = saturateTo(set([startpoint]), functions, max(-lowerbound, upperbound))
 		start = [x for x in start if x<=upperbound and x>=lowerbound]
