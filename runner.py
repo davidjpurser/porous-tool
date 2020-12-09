@@ -28,7 +28,9 @@ def pyprint(data):
 	txt = breaker(txt)
 	txt = appen(txt, "start:", data['start'],'target:', data['target'], "functions:", data['functions'])
 	txt = breaker(txt)
-	txt = appen(txt, "invariant:" ,data['inv'])
+	if data['everything']:
+		txt = appen(txt, "invariant:",'ALL')
+	txt = appen(txt, "invariant:",data['inv'])
 	if 'errors' in data:
 		txt = breaker(txt)
 		txt = appen(txt, "errors:" ,data['errors'])
@@ -103,6 +105,7 @@ def manual(inst):
 		'functions': functions,
 		'instance' : instance,
 		'inv' : semi,
+		'everything': semi.weaklyIsEverything(),
 		'time': {
 			'invariant': end_time - start_time
 		}

@@ -63,6 +63,23 @@ class semilinear:
 				return x
 		return False
 
+	# true then is everything
+	# false may still be everything, but not through all Z's
+	def weaklyIsEverything(self):
+
+		Zs = self.getZsets()
+		if len(Zs) == 0:
+			return False
+
+		period = Zs[0].periods
+		modulos = [x.base for x in Zs]
+		allmods = list(range(period))
+		if set(modulos) == set(allmods):
+			return True
+		
+		# could add more N analysis
+		return False
+
 
 	def reduction(self):
 		return
@@ -115,9 +132,3 @@ class semilinear:
 		print("Z", len(Zs), len(self.getZsets()))
 		print("N", len(Ns), len(self.getNsets()))
 		print("S", len(Ss), len(self.getSsets()))
-
-
-
-
-
-
