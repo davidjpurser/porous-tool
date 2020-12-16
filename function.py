@@ -48,6 +48,9 @@ class function:
 	def isGrower(self):
 		return abs(self.mult) > 1
 
+	def isRestarter(self):
+		return self.mult == 0
+
 	def growingFrom(self, extra=0):
 		#only makes sense if not counter
 		return int(math.ceil((abs(self.add) + abs(extra))/(abs(self.mult)-1)))

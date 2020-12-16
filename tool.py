@@ -132,6 +132,23 @@ def positiveCounters(semi, startpoint, bound, counter, others):
 
 def buildinv(startpoint,target, functions):
 
+	# if any([x.isRestarter() for x in functions]):
+	# 	without = [x for x in functions if not x.isRestarter()]
+	# 	invs = []
+	# 	invs.append(buildinv(startpoint,target,without))
+	# 	starts = set()
+	# 	starts.add(startpoint)
+	# 	for x in functions:
+	# 		if x.isRestarter()
+	# 			starts.add(x.add)
+	# 			start = startpoint,target,functions
+	# 			invs.append(buildinv(x.add, target,without))
+
+	# 	for x in invs[1:]:
+	# 		for lset in x.lsets:
+	# 			invs[0].self(lsets)
+	# 	return invs[0],  startpoint,target,functions
+
 	if startpoint < 0:
 		newstartpoint = -startpoint
 		newtarget = -target
