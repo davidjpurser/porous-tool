@@ -32,12 +32,14 @@ def buildProof(semi, functions,errors = None):
 	#you had better be sure
 def buildReachProof(start, target, semi, functions,errors = None):
 	
-	if not semi.containsFuzz(linearset(target)):
+	if not semi.containsFuzz(target):
 		# you should never have run this.
 		if errors:
 				errors.error("Target not in semi-linear, you shouldn't have run this ")
 		return False
 	print("building reachability graph")
+
+	target = target.getBase()
 
 	seen = set()
 	before = {}
