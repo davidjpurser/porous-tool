@@ -35,6 +35,10 @@ class linearset:
 		if p != None:
 			self.addPeriod(p)		
 
+
+	def isSingleton(self):
+		return self.periods == None
+
 	def setType(self, t):
 		if abs(t) != 1:
 			return False

@@ -141,13 +141,26 @@ def buildinv(startpoint,target, functions):
 	# 	for x in functions:
 	# 		if x.isRestarter()
 	# 			starts.add(x.add)
-	# 			start = startpoint,target,functions
+	# 			start = startpoint,semilinearTarget,functions
 	# 			invs.append(buildinv(x.add, target,without))
 
 	# 	for x in invs[1:]:
 	# 		for lset in x.lsets:
 	# 			invs[0].self(lsets)
 	# 	return invs[0],  startpoint,target,functions
+
+	semilinearTarget = target
+
+	
+	if not target.isSingleton():
+		period = target.getPeriod()
+		semi = semilinear()
+		semi.add(linearset(startpoint,period,-1))
+		saturateZ(semi,functions)
+		return semi,startpoint,semilinearTarget,functions
+
+	else: 
+		target = target.getBase()
 
 	if startpoint < 0:
 		newstartpoint = -startpoint
@@ -195,7 +208,7 @@ def buildinv(startpoint,target, functions):
 		lset1 = linearset(startpoint,period,-1)
 		semi.add(lset1)
 		saturateZ(semi,functions)
-		return semi, startpoint,target,functions
+		return semi, startpoint,semilinearTarget,functions
 
 	# there can only be one pure inverter
 	inverter = None
@@ -210,7 +223,7 @@ def buildinv(startpoint,target, functions):
 		semi = semilinear()
 		semi.add(linearset(startpoint))
 		semi.add(linearset(inverter.apply(startpoint)))
-		return semi, startpoint,target,functions
+		return semi, startpoint,semilinearTarget,functions
 
 	# all nonInverters growers
 	if all(growStatus):
@@ -238,7 +251,7 @@ def buildinv(startpoint,target, functions):
 		dir2 = linearset(lowerbound,-1,1)
 		semi.add(dir1)
 		semi.add(dir2)
-		return semi,  startpoint,target,functions
+		return semi,  startpoint,semilinearTarget,functions
 
 	if any(positiveCounter) or any(negativeCounter):
 		semi = semilinear()
@@ -263,7 +276,7 @@ def buildinv(startpoint,target, functions):
 		print("-------here" , semi)
 		#maybe everything turns out to be Z sets already
 		if not semi.includesNs():
-			return semi,  startpoint,target,functions
+			return semi,  startpoint,semilinearTarget,functions
 
 		# no then we need to deal with Ns?
 
@@ -293,7 +306,7 @@ def buildinv(startpoint,target, functions):
 			bound = - bound
 			semi = positiveCounters(semi, startpoint, bound, counter, others)
 
-		return semi,  startpoint,target,functions
+		return semi,  startpoint,semilinearTarget,functions
 
 	print("I don't know how to handle this case")
 	return None

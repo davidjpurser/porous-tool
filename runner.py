@@ -72,7 +72,13 @@ def service(data):
 		split = line.split(" ")
 		if i == 0:
 			start = int(split[0])
-			target = int(split[1])
+			
+			targetStr = split[1]
+			if '+' in targetStr:
+				target = linearset(int(targetStr.split('+')[0]), int(targetStr.split('+')[1]),-1)
+			else:
+				target = linearset(int(split[1]))
+
 			if len(split) > 2:
 				expectation = split[2] == 'True'
 			else:
@@ -97,7 +103,7 @@ def manual(inst):
 	print(semi)
 	semi.reduction()
 
-	print('reality:', semi.containsFuzz(linearset(target)) , 'expections:', expectation)
+	print('reality:', semi.containsFuzz(target) , 'expections:', expectation)
 
 	data = {
 		'start': start,
@@ -116,21 +122,25 @@ def manual(inst):
 	data['time']['proofOfInvariant'] = end_time - start_time
 
 
-	data['reachable'] = semi.containsFuzz(linearset(target))
+	data['reachable'] = semi.containsFuzz(target)
 
-	if semi.containsFuzz(linearset(target)):
-		data['targetmember'] = semi.getContainsFuzz(linearset(target))
-		start_time = time.time()
-		reachproof = buildReachProof(start,target,semi,functions, errors)
-		end_time = time.time()
-		if len(reachproof) > 500:
-			data['por']= " -> ".join([str(x) for x in reachproof[:5] + [".... stuff ...."] + reachproof[-5:]])
+	if  semi.containsFuzz(target):
+		data['targetmember'] = semi.getContainsFuzz(target)
+		if target.isSingleton():
+			start_time = time.time()
+			reachproof = buildReachProof(start,target,semi,functions, errors)
+			end_time = time.time()
+			if len(reachproof) > 500:
+				data['por']= " -> ".join([str(x) for x in reachproof[:5] + [".... stuff ...."] + reachproof[-5:]])
+			else:
+				data['por']= " -> ".join([str(x) for x in reachproof])
+			data['time']['proofOfReachability'] = end_time - start_time
 		else:
-			data['por']= " -> ".join([str(x) for x in reachproof])
-		data['time']['proofOfReachability'] = end_time - start_time
+			data['por'] = "unsupported"
+			data['time']['proofOfReachability'] = 0
 
 	if expectation!=None:
-		data['passtest'] = semi.containsFuzz(linearset(target)) == expectation
+		data['passtest'] = semi.containsFuzz(target) == expectation
 		data['expectation'] = expectation
 	if errors.hasErrors():
 		data['errors'] = str(errors.getErrors())
