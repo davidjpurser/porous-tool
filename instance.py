@@ -17,7 +17,14 @@ class instance:
 
 	def __repr__(self):
 		txt = ""
-		txt += str(self.start) + " " + str(self.target)
+		if type(self.target) is int:
+			targetString = str(self.target)
+		elif self.target.isSingleton():
+			targetString = str(self.target.getBase())
+		else:
+			targetString = str(self.target.getBase()) + "+"+ str(self.target.getPeriod())
+
+		txt += str(self.start) + " " + targetString
 		if self.exp is not None:
 			txt += " " + str(self.exp)
 		txt += "\n"

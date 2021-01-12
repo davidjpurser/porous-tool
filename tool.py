@@ -128,8 +128,6 @@ def positiveCounters(semi, startpoint, bound, counter, others):
 					pass
 	return semi
 
-
-
 def buildinv(startpoint,target, functions):
 
 	# if any([x.isRestarter() for x in functions]):
@@ -148,6 +146,9 @@ def buildinv(startpoint,target, functions):
 	# 		for lset in x.lsets:
 	# 			invs[0].self(lsets)
 	# 	return invs[0],  startpoint,target,functions
+
+	if type(target) is int:
+		target = linearset(target)
 
 	semilinearTarget = target
 

@@ -18,7 +18,8 @@ def getRand(bot,top):
 	if bot > top:
 		return randint(top,bot)
 	return randint(bot,top)
-	
+
+
 def generateCounter(dir, max):
 	val = getRand(dir,max*dir)
 	return function(1,val)
@@ -66,54 +67,87 @@ generatePosPureInverter,
 generateNegPureInverter,
 generateNullInverter]
 
-max = 50
+max = 1000
 ordering = list(powerset(types))
 random.shuffle(list(powerset(types)))
 print(ordering)
-for x in ordering:
-	functionTypes = (list(x))
-	if len(functionTypes) == 0:
-		continue
 
-	functions = []
-	nt = ""
-	stcode = ""
-	for t in types:
-		if t in functionTypes:
-			number = getRand(1,4)
-			nt += str(number)
-			stcode += "1"
+def getWork():
+	for x in ordering:
+		functionTypes = (list(x))
+		if len(functionTypes) == 0:
+			continue
 
-			for i in range(number):
-				functions.append(t(max))
-		else:
-			nt += "0"
-			stcode += "0"
+		functions = []
+		nt = ""
+		stcode = ""
+		for t in types:
+			if t in functionTypes:
 
-	inst = instance(getRand(1,max),getRand(1,4*max),functions)
+				number = getRand(1,2)
+				# 50% chance of just 1
+				if number ==2:
+					number = getRand(2,9)
+				nt += str(number)
+				stcode += "1"
+
+				for i in range(number):
+					functions.append(t(max))
+			else:
+				nt += "0"
+				stcode += "0"
+
+		inst = instance(getRand(1,max),linearset(getRand(1,4*max)),functions)
+		yield (inst,stcode, nt)
+
+import os
+if not os.path.exists("problems/errors"):
+    os.makedirs("problems/errors")
+if not os.path.exists("problems/good"):
+    os.makedirs("problems/good")
+
+if not os.path.exists("document.csv"):
+	with open('document.csv','w') as f:
+		writer = csv.writer(f)
+		row = ['stcode','ntcode','size','name','reachable','errors','errorlist','time1','time2','time3']
+		writer.writerow(row)
+
+
+print(list[getWork()])
+import time
+def work(tpl):
+	inst,stcode, nt = tpl
 	data = runner.manual(inst)
 	print(data)
 
-
+	name = "-".join([str(x) for x in [stcode,nt,data['reachable'],'errors' in data, time.time()
+]])
 	if 'errors' in data:
-		name = inst.getName(nt)
+		
 		saveAs(name, inst, "errors", data)
 		errors = str(data['errors'])
 	else:
-		inst.setExp(data['inv'].containsFuzz(linearset(inst.target)))
-		name = nt + "-" + inst.getName()
+		inst.setExp(data['inv'].containsFuzz(inst.target))
 		saveAs(name, inst, "good",data)
 		errors = str([])
 
 	with open('document.csv','a') as f:
 		writer = csv.writer(f)
-		row = [stcode,nt,name, data['reachable'],'errors' in data,errors]
+		row = [stcode,nt,max,name, data['reachable'],'errors' in data,errors]
 		for x in ['invariant', 'proofOfInvariant','proofOfReachability']:
 			row.append(f"{data['time'][x]:.9f}" if x in data['time'] else -1)
 		writer.writerow(row)
 
 
+
 	runner.pyprint(data)
 	print(inst)
 
+# for x in getWork():
+# 	work(x)
 
+from multiprocessing import Pool
+if __name__ == '__main__':
+	for x in range(8):
+		with Pool(8) as p:
+		    p.map(work, getWork())
