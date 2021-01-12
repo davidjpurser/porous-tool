@@ -10,6 +10,7 @@ def avg(lst):
 
 
 def do(lst):
+    print(len(lst))
     reachyn = Counter([x['reachable'] for x in lst])
     print(reachyn, reachyn['True']/len(lst))
     rp = Counter([(x['reachable'],x['errors']) for x in lst])

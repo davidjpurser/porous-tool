@@ -67,38 +67,39 @@ generatePosPureInverter,
 generateNegPureInverter,
 generateNullInverter]
 
-max = 1000
+max = 10
 ordering = list(powerset(types))
 random.shuffle(list(powerset(types)))
 print(ordering)
 
 def getWork():
-	for x in ordering:
-		functionTypes = (list(x))
-		if len(functionTypes) == 0:
-			continue
+	for _ in range(8):
+		for x in ordering:
+			functionTypes = (list(x))
+			if len(functionTypes) == 0:
+				continue
 
-		functions = []
-		nt = ""
-		stcode = ""
-		for t in types:
-			if t in functionTypes:
+			functions = []
+			nt = ""
+			stcode = ""
+			for t in types:
+				if t in functionTypes:
 
-				number = getRand(1,2)
-				# 50% chance of just 1
-				if number ==2:
-					number = getRand(2,9)
-				nt += str(number)
-				stcode += "1"
+					number = getRand(1,2)
+					# 50% chance of just 1
+					if number ==2:
+						number = getRand(2,9)
+					nt += str(number)
+					stcode += "1"
 
-				for i in range(number):
-					functions.append(t(max))
-			else:
-				nt += "0"
-				stcode += "0"
+					for i in range(number):
+						functions.append(t(max))
+				else:
+					nt += "0"
+					stcode += "0"
 
-		inst = instance(getRand(1,max),linearset(getRand(1,4*max)),functions)
-		yield (inst,stcode, nt)
+			inst = instance(getRand(1,max),linearset(getRand(1,4*max)),functions)
+			yield (inst,stcode, nt)
 
 import os
 if not os.path.exists("problems/errors"):
@@ -113,10 +114,14 @@ if not os.path.exists("document.csv"):
 		writer.writerow(row)
 
 
-print(list[getWork()])
+# print(list[getWork()])
 import time
 def work(tpl):
 	inst,stcode, nt = tpl
+
+	with open('log.csv','a') as f:
+		f.write(inst.getName() +"\n")
+
 	data = runner.manual(inst)
 	print(data)
 
@@ -148,6 +153,5 @@ def work(tpl):
 
 from multiprocessing import Pool
 if __name__ == '__main__':
-	for x in range(8):
-		with Pool(8) as p:
-		    p.map(work, getWork())
+	with Pool(8) as p:
+	    p.map(work, getWork())

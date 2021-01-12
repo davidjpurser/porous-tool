@@ -91,12 +91,16 @@ def saturateZ(semi, functions):
 
 def positiveCounters(semi, startpoint, bound, counter, others):
 
+	print(semi)
+
 	Q = [startpoint]
 	T = ModuloTree(counter.add)
 	# print(T)
 
 	while len(Q) > 0:
+		print(Q)
 		p = Q.pop(0)
+		print(p, others)
 		# print(p, Q)
 		for f in others:
 			next = f.apply(p)
@@ -108,6 +112,9 @@ def positiveCounters(semi, startpoint, bound, counter, others):
 			elif semi.containsFuzz(linearset(next,counter.add,-1)):
 				# print(next, "already")
 				#already have a z linear set for this guy
+				pass
+			elif semi.containsFuzz(linearset(next,counter.add,1)):
+				#already have  a n linear set for this guy
 				pass
 			else:
 				# print(next, "work")
@@ -124,7 +131,7 @@ def positiveCounters(semi, startpoint, bound, counter, others):
 					return positiveCounters(semi, startpoint, bound, counter, others)
 				else:
 					# didn't find anything in the search, keep looking
-					# print("continue workingc")
+					print("continue workingc")
 					pass
 	return semi
 
@@ -301,6 +308,7 @@ def buildinv(startpoint,target, functions):
 		growers = [x for x in nonInverters if not x.isCounter()]
 		bound = max([x.growingFrom() for x in growers] + [startpoint]) +1
 		# bound = max(bound, startpoint) + 1
+		print("bound",bound)
 		if counter.apply(startpoint) - startpoint > 0:
 			semi = positiveCounters(semi, startpoint, bound, counter, others)
 		else: #negative counters
