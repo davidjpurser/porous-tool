@@ -11,7 +11,7 @@
          }	
          textarea {
          width: 100%;
-         height: 200px;
+         height: 140px;
          font-family : monospace
          }
          #output{
@@ -23,28 +23,34 @@
       <title>Affine Programs Invariant Builder And Reachability Checker</title>
    </head>
    <body>
-      <header>
-         <div class="container text-center">
+      <header class="mb-2">
+         <div class="container text-center ">
             <h2>Affine Programs Invariant Builder And Reachability Checker</h2>
          </div>
       </header>
       <div class="container">
-         <main>
-            <h3>Input Format</h3>
+         <div class="row">
+            <div class="col col-7">
+<h3>Input Format Explanation</h3>
             On the first line write the start point, target and optionally whether you expect it to be reachable.
             If the start point is negative, the problem will be inverted so it is positive.
-            <br>
             Supported targets are single numbers, or Z-linear sets, with {b+pZ} specified as b+p.
             <br>
             On subsequent lines, write the functions by writing the multiplier and the adder, i.e. <code>a b</code> means <code>f(x) = ax+b</code>. Do not include redundant functions.<br>
             On the line after the last function, optionally, write ENDS. Everything after ENDS will be ignored.<br>
-            <code>startpoint target[+period] [True|False]<br>
+            </div>
+        
+            <div class="col col-5">
+               <h3> Format</h3>
+            <code>start target[+period] [True|False]<br>
             a b <br>
             ...<br>
             a b <br>
             [ENDS]
             </code>
-            <br>
+         </div>
+      </div>
+         <main>
             <h3>Input area</h3>
             Examples:
             <button class="example btn btn-primary" data="1 0 False
