@@ -103,7 +103,7 @@ def manual(inst):
 	print(semi)
 	semi.reduction()
 
-	print('reality:', semi.containsFuzz(target) , 'expections:', expectation)
+	print('reality:', semi.containsFuzz(target) , 'expectations:', expectation)
 
 	data = {
 		'start': start,
