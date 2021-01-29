@@ -39,10 +39,10 @@ def pyprint(data):
 	
 
 	if data['reachable']:
-		txt = appen(txt, 'target', data['target'], 'in', data['targetmember'], 'reachable')	
+		txt = appen(txt, 'target', data['target'], 'in', data['targetmember'])	
 		txt = appen(txt, 'proof of reachability:', data['por'])
 	else: 
-		txt = appen(txt, 'target', data['target'], 'not in invariant', 'unreachable')	
+		txt = appen(txt, 'target', data['target'], 'disjoint from invariant')	
 
 	if 'expectation' in data:
 		txt = appen(txt, 'expecting:', "reachable" if data['expectation'] == True else "unreachable")
