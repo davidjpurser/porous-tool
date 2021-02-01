@@ -6,6 +6,8 @@ import runner
 import csv
 import random
 
+## randomly generated problems according to the paper
+
 def saveAs(name, inst, type,data = None):
 	with open("problems/" + type + "/" + name +".genproblem", 'w') as f:
 		f.write(str(inst))
@@ -67,12 +69,11 @@ generatePosPureInverter,
 generateNegPureInverter,
 generateNullInverter]
 
-max = 10
 ordering = list(powerset(types))
 random.shuffle(list(powerset(types)))
 print(ordering)
 
-def getWork():
+def getWork(largest):
 	for _ in range(8):
 		for x in ordering:
 			functionTypes = (list(x))
@@ -93,13 +94,13 @@ def getWork():
 					stcode += "1"
 
 					for i in range(number):
-						functions.append(t(max))
+						functions.append(t(largest))
 				else:
 					nt += "0"
 					stcode += "0"
 
-			inst = instance(getRand(1,max),linearset(getRand(1,4*max)),functions)
-			yield (inst,stcode, nt)
+			inst = instance(getRand(1,largest),linearset(getRand(1,4*largest)),functions)
+			yield (inst,stcode, nt,largest)
 
 import os
 if not os.path.exists("problems/errors"):
@@ -117,7 +118,7 @@ if not os.path.exists("document.csv"):
 # print(list[getWork()])
 import time
 def work(tpl):
-	inst,stcode, nt = tpl
+	inst,stcode, nt,largest = tpl
 
 	with open('log.csv','a') as f:
 		f.write(inst.getName() +"\n")
@@ -138,7 +139,7 @@ def work(tpl):
 
 	with open('document.csv','a') as f:
 		writer = csv.writer(f)
-		row = [stcode,nt,max,name, data['reachable'],'errors' in data,errors]
+		row = [stcode,nt,largest,name, data['reachable'],'errors' in data,errors]
 		for x in ['invariant', 'proofOfInvariant','proofOfReachability']:
 			row.append(f"{data['time'][x]:.9f}" if x in data['time'] else -1)
 		writer.writerow(row)
@@ -154,4 +155,11 @@ def work(tpl):
 from multiprocessing import Pool
 if __name__ == '__main__':
 	with Pool(8) as p:
-	    p.map(work, getWork())
+	    p.map(work, getWork(8))
+	    p.map(work, getWork(16))
+	    p.map(work, getWork(32))
+	    p.map(work, getWork(64))
+	    p.map(work, getWork(128))
+	    p.map(work, getWork(256))
+	    p.map(work, getWork(512))
+	    p.map(work, getWork(1024))

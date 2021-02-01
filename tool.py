@@ -6,6 +6,9 @@ from linearset import *
 from functools import reduce
 from math import gcd
 
+
+#The real invariant building code.
+
 def lgcd(list):
     x = reduce(gcd, list)
     return x

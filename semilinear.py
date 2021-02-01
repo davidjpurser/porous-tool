@@ -1,5 +1,7 @@
 from linearset import * 
 
+
+# semilinear set, a collection of linear sets
 class semilinear:
 
 	def __init__(self):

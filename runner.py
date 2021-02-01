@@ -14,6 +14,10 @@ from errors import *
 
 from tool import buildinv
 
+#methods to invoke the code and make the output pretty
+
+
+
 def appen(txt, *vartuple):
 	vars = list(vartuple)
 	txt = txt + " ".join([str(x) for x in vars]) 

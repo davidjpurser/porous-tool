@@ -4,7 +4,8 @@ def appen(txt, *vartuple):
 	txt = txt + " ".join([str(x) for x in vars]) 
 	txt += "\n"
 	return txt 
-
+	
+# just holds the errors
 class Errors:
 	def __init__(self):
 		self.errors = []

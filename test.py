@@ -1,5 +1,7 @@
 from linearset import *
 
+# Some tests that make sure linearsets work as you would expect.
+
 assert(linearset(5,10,1).contains(5))
 assert(linearset(5,10,1).contains(15))
 assert(not linearset(5,10,1).contains(6))

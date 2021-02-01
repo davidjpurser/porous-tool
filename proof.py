@@ -7,6 +7,9 @@ from functools import reduce
 from errors import *
 
 
+## proofs of reachability and invariants
+
+# proof of invariance
 def buildProof(semi, functions,errors = None):
 	data= []
 	print("building proof", len(semi.lsets))
@@ -29,7 +32,7 @@ def buildProof(semi, functions,errors = None):
 	print("proof built")
 	return data
 
-	#you had better be sure
+#you had better be sure that it is reachable. Otherwise it won't terminate.
 def buildReachProof(start, target, semi, functions,errors = None):
 	
 	if not semi.containsFuzz(target):
@@ -49,6 +52,7 @@ def buildReachProof(start, target, semi, functions,errors = None):
 	start_time = time.time()
 	timeout = 30
 	while len(Q) > 0:
+		#timeout
 		if (time.time() - start_time) > timeout:
 			print("giving up")
 			if errors:
