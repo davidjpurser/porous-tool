@@ -54,8 +54,18 @@ with open('document.csv', mode='r') as csv_file:
         a = do([x for x in lst if x['size'] == str(sz)])
         mylist.append(a)
 
-    ordering = ["Instance size","Decision time avg","Decision time max","Unreachable",
-    "Invariant Proof Time avg","Invariant Proof Time max","Reachable","Reachable+Proof","Reachability Proof Time avg","Reachability Proof Time max"]
+    ordering = ["Instance size",
+    "Decision time avg",
+    "Decision time max",
+    "Unreachable",
+    "Invariant Proof Time avg",
+    "Invariant Proof Time max",
+    "Reachable",
+    "Reachable+Proof",
+    "Reachability Proof Time avg",
+    # "Reachability Proof Time max"
+    ]
+    
     for x in mylist:
         strings = []
         for y in ordering:
