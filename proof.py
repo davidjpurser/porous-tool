@@ -47,7 +47,13 @@ def buildReachProof(start, target, semi, functions,errors = None):
 	seen = set()
 	before = {}
 
-	Q = [start]
+
+	if type(start) is int:
+		Q = [start]
+		start = set()
+		start.add(Q[0])
+	else:
+		Q = list(start)
 
 	start_time = time.time()
 	timeout = 30
@@ -69,7 +75,7 @@ def buildReachProof(start, target, semi, functions,errors = None):
 					print("target found, just need to build the route")
 					output = []
 					here = next
-					while here != start:
+					while here not in start:
 						output.append(here)
 						output.append(before[here][1])
 						here = before[here][0]

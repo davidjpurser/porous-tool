@@ -140,22 +140,25 @@ def positiveCounters(semi, startpoint, bound, counter, others):
 
 def buildinv(startpoint,target, functions):
 
-	# if any([x.isRestarter() for x in functions]):
-	# 	without = [x for x in functions if not x.isRestarter()]
-	# 	invs = []
-	# 	invs.append(buildinv(startpoint,target,without))
-	# 	starts = set()
-	# 	starts.add(startpoint)
-	# 	for x in functions:
-	# 		if x.isRestarter()
-	# 			starts.add(x.add)
-	# 			start = startpoint,semilinearTarget,functions
-	# 			invs.append(buildinv(x.add, target,without))
+	if any([x.isRestarter() for x in functions]):
+		without = [x for x in functions if not x.isRestarter()]
+		invs = []
+		invs.append(buildinv(startpoint,target,without))
+		starts = set()
+		starts.add(startpoint)
+		for x in functions:
+			if x.isRestarter():
+				starts.add(x.add)
+				invs.append(buildinv(x.add, target,without))
 
-	# 	for x in invs[1:]:
-	# 		for lset in x.lsets:
-	# 			invs[0].self(lsets)
-	# 	return invs[0],  startpoint,target,functions
+		firstInv = invs[0][0]
+		for x in invs[1:]:
+			inv,start,target,functions = x
+			for lset in inv.lsets:
+				firstInv.add(lset)
+
+		print(firstInv, starts,target,functions)
+		return firstInv, starts,target,functions
 
 	if type(target) is int:
 		target = linearset(target)
@@ -198,6 +201,13 @@ def buildinv(startpoint,target, functions):
 	negativeCounter = [x.isNegativeCounter() for x in functions]
 	pureInverters = [x.isPureInverter() for x in functions]
 
+	# no useful functions 
+	if len(functions) ==0:
+		semi = semilinear()
+		semi.add(linearset(startpoint))
+		return semi, startpoint,semilinearTarget,functions
+
+
 	# multiple pure inverters, then there are bi-directional counters
 	if not any(positiveCounter) and not any(negativeCounter) and sum(pureInverters) > 1:
 		inverters = [x for x in functions if x.isPureInverter()]
@@ -220,6 +230,7 @@ def buildinv(startpoint,target, functions):
 		semi.add(lset1)
 		saturateZ(semi,functions)
 		return semi, startpoint,semilinearTarget,functions
+
 
 	# there can only be one pure inverter
 	inverter = None
