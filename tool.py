@@ -246,7 +246,7 @@ def buildinv(startpoint,target, functions):
 
 		growPoints =[x.growingFrom(invertadd) for x in nonInverters]
 		growPoint = max(growPoints)
-		growPoint = max(growPoint, target+2)
+		growPoint = max(growPoint, abs(target)+2)
 		print("-------------", growPoint)
 		lowerbound = -growPoint
 		upperbound = growPoint

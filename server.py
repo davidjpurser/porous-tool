@@ -48,6 +48,6 @@ class RequestHandler(BaseHTTPRequestHandler):
         return
 
 if __name__ == '__main__':
-    server = HTTPServer(('localhost', 8000), RequestHandler)
-    print('Starting server at http://localhost:8000')
+    server = HTTPServer(('localhost', 8808), RequestHandler)
+    print('Starting server at http://localhost:8808')
     server.serve_forever()
