@@ -55,6 +55,9 @@ def buildReachProof(start, target, semi, functions,errors = None):
 	else:
 		Q = list(start)
 
+	if target in Q:
+		return [target]
+
 	start_time = time.time()
 	timeout = 30
 	while len(Q) > 0:
