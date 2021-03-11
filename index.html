@@ -20,12 +20,12 @@
          background-color: white;
          }
       </style>
-      <title>Affine Programs Invariant Builder And Reachability Checker</title>
+      <title>POROUS: Invariant Builder And Reachability Checker for Affine Programs</title>
    </head>
    <body>
       <header class="mb-2">
          <div class="container text-center ">
-            <h2>Affine Programs Invariant Builder And Reachability Checker</h2>
+            <h2>POROUS: Invariant Builder And Reachability Checker for Affine Programs</h2>
          </div>
       </header>
       <div class="container">
@@ -33,10 +33,10 @@
             <div class="col col-7">
 <h3>Input Format Explanation</h3>
             On the first line write the start point, target and optionally whether you expect it to be reachable.
-            If the start point is negative, the problem will be inverted so it is positive.
-            Supported targets are single numbers, or Z-linear sets, with {b+pZ} specified as b+p.
+            Supported targets are single numbers, or Z-linear sets, with {b+pZ} specified as b+p (note, b+-p is equivalent).
             <br>
-            On subsequent lines, write the functions by writing the multiplier and the adder, i.e. <code>a b</code> means <code>f(x) = ax+b</code>. Do not include redundant functions.<br>
+            On subsequent lines, write the functions by writing the multiplier and the adder, i.e. <code>a b</code> means <code>f(x) = ax+b</code>. 
+            <br>
             On the line after the last function, optionally, write ENDS. Everything after ENDS will be ignored.<br>
             </div>
         

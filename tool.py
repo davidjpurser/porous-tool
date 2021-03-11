@@ -176,12 +176,19 @@ def buildinv(startpoint,target, functions):
 	else: 
 		target = target.getBase()
 
+	##### SINGLE POINT TARGET FROM HERE
+
 	if startpoint < 0:
 		newstartpoint = -startpoint
 		newtarget = -target
 		newfunctions = [x.getReverseFunction() for x in functions]
 		print("starting at negative, reversing everything", newstartpoint,newtarget,newfunctions)
-		return buildinv(newstartpoint,newtarget,newfunctions)
+		newsemi,newstartpoint,newsemilinearTarget,newfunctions =  buildinv(newstartpoint,newtarget,newfunctions)
+		propersemi = semilinear()
+		for x in newsemi.lsets:
+			propersemi.add(x.getInverse())
+		return propersemi,startpoint,semilinearTarget,functions
+
 
 
 	

@@ -20,6 +20,12 @@ class linearset:
 	
 		return left
 
+	def getInverse(self):
+		if self.isSingleton():
+			return linearset(-self.base)
+		else:
+			return linearset(-self.base,-self.periods,self.type)
+
 
 	def explainrepr(self):
 		left = __repr__(self)

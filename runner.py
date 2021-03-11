@@ -140,7 +140,7 @@ def manual(inst):
 				data['por']= " -> ".join([str(x) for x in reachproof])
 			data['time']['proofOfReachability'] = end_time - start_time
 		else:
-			data['por'] = "unsupported"
+			data['por'] = "reachability of periodic target not supported"
 			data['time']['proofOfReachability'] = 0
 
 	if expectation!=None:
