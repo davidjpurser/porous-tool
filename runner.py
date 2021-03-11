@@ -30,6 +30,7 @@ def breaker(txt):
 def pyprint(data):
 	txt = ""
 	txt = breaker(txt)
+	txt = appen(txt, "Interpretation of input")
 	txt = appen(txt, "start:", data['start'],'target:', data['target'], "functions:", data['functions'])
 	txt = breaker(txt)
 	if data['everything']:
