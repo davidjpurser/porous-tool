@@ -37,7 +37,6 @@ class RequestHandler(BaseHTTPRequestHandler):
             data = {}
 
         output = service(data)
-        # output = {x:output[x] for x in output if is_jsonable(output[x])}
 
         parsed_path = urlparse(self.path)
         self.send_response(200)

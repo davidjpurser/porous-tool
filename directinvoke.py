@@ -1,17 +1,10 @@
+"""
+This is an example of how to invoke the system from code.
 
-import time
-from tabulate import tabulate
-import math
-from function import *
-from tree import *
+The example corresponds to the MU Puzzle.
+"""
+
 from instance import *
-from semilinear import *
-from linearset import *
-from functools import reduce
-from proof import buildProof
-from proof import buildReachProof
-from math import gcd
-from errors import *
 from runner import *
 
 functions = [
@@ -19,10 +12,9 @@ functions = [
 	function(1,-3),
 ]
 
-
 print(functions)
 x = 1
-target = 22
+target = 0
 ins = instance(x,target,functions)
 computed = manual(ins)
 pyprint(computed)

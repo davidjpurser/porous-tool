@@ -1,3 +1,8 @@
+"""
+	Code to build Porous 1-d invariants.
+	buildinv is the interesting method
+"""
+
 import math
 from function import *
 from tree import *
@@ -7,7 +12,6 @@ from functools import reduce
 from math import gcd
 
 
-#The real invariant building code.
 
 def lgcd(list):
     x = reduce(gcd, list)

@@ -13,7 +13,7 @@ def home_handler(environ, start_fn):
     with open('index.html', 'rb') as reader:
         return reader.read()
 
-def about_handler(environ, start_fn):
+def invariant_handler(environ, start_fn):
     # start_fn('200 OK', [('Content-Type', 'text/json; charset=utf-8')])
     try:
         request_body_size = int(environ.get('CONTENT_LENGTH', 0))
@@ -43,7 +43,7 @@ def about_handler(environ, start_fn):
 
 routes = {
     '/': home_handler,
-    '/about': about_handler,
+    '/invariant': invariant_handler,
 }
 
 

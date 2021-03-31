@@ -21,7 +21,7 @@ A live instance is available at [http://invariants.1251.uk](http://invariants.12
 
 To run the tool from a problem file run `python3 runner.py [problemfile]` for example `python3 runner.py problems/my.problem`. There are some example problems in the problems folder.
 
-Or start the server `python3 server.py` (ensure port 8000 is clear) and visit `http://localhost:8000/`. To run on a `wsgi` webserver the file is `wsgi`, but a live instance of this can be seen at `http://invariants.1251.uk`.
+Or start the server `python3 server.py` (ensure port 8808 is clear) and visit `http://localhost:8808/`. To run on a `wsgi` webserver the file is `wsgi`, but a live instance of this can be seen at `http://invariants.1251.uk`.
 
 See `directinvoke.py` for examples of how to manually create instances and invoke from python code.
 

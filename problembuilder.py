@@ -149,8 +149,6 @@ def work(tpl):
 	runner.pyprint(data)
 	print(inst)
 
-# for x in getWork():
-# 	work(x)
 
 from multiprocessing import Pool
 if __name__ == '__main__':

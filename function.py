@@ -1,6 +1,9 @@
 import math
-## f(x) = m x + a
+
 class function:
+	""" 
+		A class to hold functions of the form: f(x) = m x + a
+	"""
 
 	def __init__(self,m,a):
 		self.mult = m

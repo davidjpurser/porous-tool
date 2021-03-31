@@ -154,34 +154,5 @@ def manual(inst):
 
 
 
-import sys
 
-if __name__ == "__main__":
-
-	if len(sys.argv) > 1 :
-		with open(sys.argv[1], "r")  as f:
-			stuff = f.read()
-			data = {}
-			print(stuff)
-			data['val']  = stuff
-			pyprint(service(data))		
-		
-
-	else:
-		functions = [
-			function(15,-5),
-			function(-1,5),
-			function(-1,-5),
-		]
-
-		functions = [
-			function(2,0),
-			function(1,-3),
-		]
-
-
-		print(functions)
-		x = 1
-		target = 22
-		pyprint(manual(instance(x,target,functions)))
 		

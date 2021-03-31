@@ -5,8 +5,12 @@ def appen(txt, *vartuple):
 	txt += "\n"
 	return txt 
 	
-# just holds the errors
 class Errors:
+	"""
+	A class that holds errors
+	"""
+
+
 	def __init__(self):
 		self.errors = []
 
