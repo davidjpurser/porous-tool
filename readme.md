@@ -45,10 +45,10 @@ On subsequent lines, write the functions by writing the multiplier and the adder
 
 On the line after the last function, optionally, write ENDS. Everything after ENDS will be ignored.
 <code>
-start target[+period] [True|False]<br>
-a b<br>
-...<br>
-a b<br>
+start target[+period] [True|False]  
+a b  
+...  
+a b  
 [ENDS] 
 </code>
 
