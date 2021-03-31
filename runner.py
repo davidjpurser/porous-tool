@@ -152,7 +152,14 @@ def manual(inst):
 	print(data)
 	return data
 
-
-
+import sys
+if __name__ == "__main__":
+	if len(sys.argv) > 1 :
+		with open(sys.argv[1], "r")  as f:
+			stuff = f.read()
+			data = {}
+			print(stuff)
+			data['val']  = stuff
+			pyprint(service(data))		
 
 		
