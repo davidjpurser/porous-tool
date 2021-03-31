@@ -33,7 +33,7 @@ If you want to inspect the guts of the code, which actually builds the invariant
 It creates random instances depending on a size parameter from 8 to 1024.
 The output of each test is placed into `document.csv`. The analysis in the paper is computed by `analysis.py` (reading `document.csv`).
 
-Every instance is stored inside the good and error folder within the problems folder, along with the input (below the ENDS of the input). Instances in the error folder are instances which did not produce a proof of reachability (a sequence of functions to get to the target), although it did decide that the instance is a reachable instance. This failure of detection is due to a timeout.
+Every instance is stored inside the good and error folder within the problems folder, along with the output (below the ENDS of the input). Instances in the error folder are instances which did not produce a proof of reachability (a sequence of functions to get to the target), although it did decide that the instance is a reachable instance. This failure of detection is due to a timeout.
 
 ## Problem format
 
@@ -45,10 +45,10 @@ On subsequent lines, write the functions by writing the multiplier and the adder
 
 On the line after the last function, optionally, write ENDS. Everything after ENDS will be ignored.
 <code>
-start target[+period] [True|False]
-a b
-...
-a b
+start target[+period] [True|False]<br>
+a b<br>
+...<br>
+a b<br>
 [ENDS] 
 </code>
 
