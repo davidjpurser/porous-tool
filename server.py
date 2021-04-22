@@ -19,11 +19,23 @@ def is_jsonable(x):
 class RequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         parsed_path = urlparse(self.path)
-        with open('index.html', 'rb') as reader:
-            self.send_response(200)
-            self.end_headers()
-            self.wfile.write(reader.read())
-            return
+        print(parsed_path.path)
+        if parsed_path.path == "/":
+
+            with open('index.html', 'rb') as reader:
+                self.send_response(200)
+                self.end_headers()
+                self.wfile.write(reader.read())
+                return
+        else:
+            try:
+                with open(parsed_path.path[1:], 'rb') as reader:
+                    self.send_response(200)
+                    self.end_headers()
+                    self.wfile.write(reader.read())
+                    return
+            except:
+                self.send_response(404)
 
         return
 
