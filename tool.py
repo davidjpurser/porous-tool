@@ -10,7 +10,7 @@ from semilinear import *
 from linearset import *
 from functools import reduce
 from math import gcd
-
+import heapq
 
 
 def lgcd(list):
@@ -314,19 +314,24 @@ def buildinv(startpoint,target, functions):
 		# no then we need to deal with Ns?
 
 		# saturate in the good direction
+		
+
 		period = starter.getPeriod()
-		Q = [starter]
+		Q = [starter.getBase()]
+		print(Q)
 		while len(Q) > 0 :
-			top = Q.pop(0)
+			b = heapq.heappop(Q)
 			for f in nonInverters:
-				b = top.getBase()
 				next = f.apply(b)
 				myset = linearset(next,period,1)
-				print(next, myset)
+				# print(next, myset,len(Q), len(semi.lsets))
 				if same_dir(startpoint,next, counters[0].apply(startpoint)):
 					if not semi.containsFuzz(myset):
 						semi.add(myset)
-						Q.append(myset)
+						Q.append(next)
+						heapq.heappush(Q,next)
+
+		print(semi)
 
 		counter = counters[0]
 		others = otherfunctions + counters[1:]
