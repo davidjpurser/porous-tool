@@ -10,15 +10,16 @@ def avg(lst):
 
 
 def do(lst):
-    print(len(lst))
+    print("number of instances at this size:", len(lst))
     reachyn = Counter([x['reachable'] for x in lst])
-    print(reachyn, reachyn['True']/len(lst))
+    print("number and fraction that are reachable instances", reachyn, reachyn['True']/len(lst))
+
     rp = Counter([(x['reachable'],x['errors']) for x in lst])
-    print(Counter([(x['reachable'],x['errors']) for x in lst]))
-    print(Counter([(x['errorlist']) for x in lst]))
-    print('time1',max([x['time1'] for x in lst]), avg([float(x['time1']) for x in lst]), )
-    print('time2',max([x['time2'] for x in lst]), avg([float(x['time2']) for x in lst]), )
-    print('time3',max([x['time3'] for x in lst if x['reachable'] == 'True']), avg([float(x['time3']) for x in lst if x['reachable'] == 'True' and x['errors']== 'False']) )
+    print("counts for (isReachable,isError)",Counter([(x['reachable'],x['errors']) for x in lst]))
+    print("errors encountered ([] means no error):",Counter([(x['errorlist']) for x in lst]))
+    print('avg+max decision time',max([x['time1'] for x in lst]), avg([float(x['time1']) for x in lst]), )
+    print('avg+max invariant proof time',max([x['time2'] for x in lst]), avg([float(x['time2']) for x in lst]), )
+    print('avg+max reachability proof time',max([x['time3'] for x in lst if x['reachable'] == 'True']), avg([float(x['time3']) for x in lst if x['reachable'] == 'True' and x['errors']== 'False']) )
     # Instance size","Decision Time & Unreachable (Percentage) & Invariant Proof Time & Reachable (Percentage) & Reachable+Proof & Reachability Proof Time
     return {
         "Instance size": lst[0]['size'],
@@ -51,9 +52,12 @@ with open(sys.argv[1], mode='r') as csv_file:
     a['Instance size'] = 'all'
     mylist = [a]
     for sz in sizes:
-        print("Size",sz)
+        print("--------------------------------------")
+        print("Analysis for complexity parameter:",sz)
         a = do([x for x in lst if x['size'] == str(sz)])
         mylist.append(a)
+
+    print("--------------------------------------")
 
     ordering = ["Instance size",
     "Decision time avg",
