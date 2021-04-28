@@ -108,6 +108,10 @@ if not os.path.exists("problems/errors"):
 if not os.path.exists("problems/good"):
     os.makedirs("problems/good")
 
+
+if os.path.exists("document.csv"):
+	os.remove("document.csv")
+
 if not os.path.exists("document.csv"):
 	with open('document.csv','w') as f:
 		writer = csv.writer(f)
