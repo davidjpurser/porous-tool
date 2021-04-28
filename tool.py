@@ -143,7 +143,6 @@ def positiveCounters(semi, startpoint, bound, counter, others):
 					semi = dealWithInverters(semi, others, counter.add)
 					print("saturated Z's",semi)
 					pass
-					#need to think!
 					# return positiveCounters(semi, startpoint, bound, counter, others)
 				else:
 					# didn't find anything in the search, keep looking
