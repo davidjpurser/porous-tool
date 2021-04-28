@@ -80,9 +80,15 @@ class linearset:
 			return number == self.base
 
 		base = self.base
-		required = (number- base)/period
-		if not required.is_integer():
+		modulo = (number- base) % period
+		# print(modulo, number-base,period)
+		if modulo != 0:
 			return False
+
+		if ((number - base) >= 0 and period >= 0) or ((number - base) <= 0 and period <= 0):
+			required = 1
+		else:
+			required = -1
 
 		if self.type == 1 and required >= 0:
 			return True

@@ -103,8 +103,9 @@ def positiveCounters(semi, startpoint, bound, counter, others):
 	Q = [startpoint]
 	T = ModuloTree(counter.add)
 	# print(T)
-
+	interationnumber =0 
 	while len(Q) > 0:
+		interationnumber +=1
 		print(Q)
 		p = Q.pop(0)
 		print(p, others)
@@ -138,7 +139,7 @@ def positiveCounters(semi, startpoint, bound, counter, others):
 					return positiveCounters(semi, startpoint, bound, counter, others)
 				else:
 					# didn't find anything in the search, keep looking
-					print("continue workingc")
+					print("continue workingc",interationnumber)
 					pass
 	return semi
 
