@@ -33,7 +33,7 @@ def buildProof(semi, functions,errors = None):
 	return data
 
 #you had better be sure that it is reachable. Otherwise it won't terminate.
-def buildReachProof(start, target, semi, functions,errors = None):
+def buildReachProof(start, target, semi, functions,errors = None, timeout = 30):
 	
 	if not semi.containsFuzz(target):
 		# you should never have run this.
@@ -59,7 +59,6 @@ def buildReachProof(start, target, semi, functions,errors = None):
 		return [target]
 
 	start_time = time.time()
-	timeout = 30
 	while len(Q) > 0:
 		#timeout
 		if (time.time() - start_time) > timeout:

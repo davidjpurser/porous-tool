@@ -97,7 +97,7 @@ def service(data):
 
 
 
-def manual(inst):
+def manual(inst,reachtimeout = 30):
 	start,target,functions,expectation = inst.asTuple()
 
 	start_time = time.time()
@@ -133,7 +133,7 @@ def manual(inst):
 		data['targetmember'] = semi.getContainsFuzz(target)
 		if target.isSingleton():
 			start_time = time.time()
-			reachproof = buildReachProof(start,target,semi,functions, errors)
+			reachproof = buildReachProof(start,target,semi,functions, errors,reachtimeout)
 			end_time = time.time()
 			if len(reachproof) > 500:
 				data['por']= " -> ".join([str(x) for x in reachproof[:5] + [".... stuff ...."] + reachproof[-5:]])

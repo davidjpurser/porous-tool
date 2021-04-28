@@ -37,9 +37,10 @@ def do(lst):
     # for code in stcodes:
     #     print(code, len([x for x in lst if x['stcode'] ==code and  x['reachable'] =='True']), len([x for x in lst if x['stcode'] ==code and  x['reachable'] =='False']), len([x for x in lst if x['stcode'] ==code and  x['reachable'] =='True' and x['errors'] == 'False']), len([x for x in lst if x['stcode'] ==code and  x['reachable'] =='True' and x['errors'] == 'True']))
  
+import sys
 
 
-with open('document.csv', mode='r') as csv_file:
+with open(sys.argv[1], mode='r') as csv_file:
     csv_reader = csv.DictReader(csv_file,delimiter=',')
     # print(list(csv_reader)[0])
     lst = list(csv_reader)

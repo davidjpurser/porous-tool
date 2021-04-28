@@ -106,6 +106,7 @@ def positiveCounters(semi, startpoint, bound, counter, others):
 	interationnumber =0 
 	while len(Q) > 0:
 		interationnumber +=1
+		print("iterating at", interationnumber)
 		print(Q)
 		p = Q.pop(0)
 		print(p, others)
@@ -115,14 +116,15 @@ def positiveCounters(semi, startpoint, bound, counter, others):
 			print(p, f , "=" , next)
 			if (bound > 0 and next > bound) or (bound< 0 and next < bound):
 				#too big in the wrong direction
-				# print(next, "to big")
+				print(next, "to big")
 				pass
 			elif semi.containsFuzz(linearset(next,counter.add,-1)):
-				# print(next, "already")
+				print(next, "already z")
 				#already have a z linear set for this guy
 				pass
 			elif semi.containsFuzz(linearset(next,counter.add,1)):
 				#already have  a n linear set for this guy
+				print(next, "already n")
 				pass
 			else:
 				# print(next, "work")
@@ -131,12 +133,18 @@ def positiveCounters(semi, startpoint, bound, counter, others):
 					Q.append(next)
 				# print(Q,T)
 				semi.add(linearset(next,counter.add,1))
+				print("adding N ", next, counter.add)
 				if T.search(next,bound):
 					newthing = linearset(next,counter.add,-1)
 					print("found a loop, adding new Z set", newthing, "and starting again")
+					print(semi)
 					semi.add(newthing)
+					print("about to staurateZ's", semi)
 					semi = dealWithInverters(semi, others, counter.add)
-					return positiveCounters(semi, startpoint, bound, counter, others)
+					print("saturated Z's",semi)
+					pass
+					#need to think!
+					# return positiveCounters(semi, startpoint, bound, counter, others)
 				else:
 					# didn't find anything in the search, keep looking
 					print("continue workingc",interationnumber)
@@ -308,6 +316,7 @@ def buildinv(startpoint,target, functions):
 		print("-------here" , semi)
 		semi = dealWithInverters(semi, functions, mincounter)
 		print("-------here" , semi)
+
 		#maybe everything turns out to be Z sets already
 		if not semi.includesNs():
 			return semi,  startpoint,semilinearTarget,functions
@@ -343,6 +352,7 @@ def buildinv(startpoint,target, functions):
 		if counter.apply(startpoint) - startpoint > 0:
 			semi = positiveCounters(semi, startpoint, bound, counter, others)
 		else: #negative counters
+			print("negativeCounter")
 			bound = - bound
 			semi = positiveCounters(semi, startpoint, bound, counter, others)
 

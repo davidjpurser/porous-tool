@@ -123,7 +123,7 @@ def work(tpl):
 	with open('log.csv','a') as f:
 		f.write(inst.getName() +"\n")
 
-	data = runner.manual(inst)
+	data = runner.manual(inst, 30)
 	print(data)
 
 	name = "-".join([str(x) for x in [stcode,nt,data['reachable'],'errors' in data, time.time()
