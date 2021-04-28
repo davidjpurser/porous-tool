@@ -74,7 +74,7 @@ random.shuffle(list(powerset(types)))
 print(ordering)
 
 def getWork(largest):
-	for _ in range(4):
+	for _ in range(8):
 		for x in ordering:
 			functionTypes = (list(x))
 			if len(functionTypes) == 0:
@@ -162,3 +162,4 @@ if __name__ == '__main__':
     [work(x) for x in getWork(128)]
     [work(x) for x in getWork(256)]
     [work(x) for x in getWork(512)]
+    [work(x) for x in getWork(1024)]
