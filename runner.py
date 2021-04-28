@@ -132,14 +132,19 @@ def manual(inst,reachtimeout = 30):
 	if  semi.containsFuzz(target):
 		data['targetmember'] = semi.getContainsFuzz(target)
 		if target.isSingleton():
-			start_time = time.time()
-			reachproof = buildReachProof(start,target,semi,functions, errors,reachtimeout)
-			end_time = time.time()
-			if len(reachproof) > 500:
-				data['por']= " -> ".join([str(x) for x in reachproof[:5] + [".... stuff ...."] + reachproof[-5:]])
+			if reachtimeout > 0:
+				start_time = time.time()
+				reachproof = buildReachProof(start,target,semi,functions, errors,reachtimeout)
+				end_time = time.time()
+				if len(reachproof) > 50:
+					data['por']= " -> ".join([str(x) for x in reachproof[:5] + [".... stuff ...."] + reachproof[-5:]])
+				else:
+					data['por']= " -> ".join([str(x) for x in reachproof])
+				data['time']['proofOfReachability'] = end_time - start_time
+	
 			else:
-				data['por']= " -> ".join([str(x) for x in reachproof])
-			data['time']['proofOfReachability'] = end_time - start_time
+				data['por'] = "reachability proof disabled"
+				data['time']['proofOfReachability'] = 0
 		else:
 			data['por'] = "reachability of periodic target not supported"
 			data['time']['proofOfReachability'] = 0
