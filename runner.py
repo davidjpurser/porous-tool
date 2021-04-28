@@ -27,6 +27,8 @@ def appen(txt, *vartuple):
 def breaker(txt):
 	return appen(txt, "-----------------")
 
+
+## Print the output of manual (the response dictionary) in a pretty(ish) way
 def pyprint(data):
 	txt = ""
 	txt = breaker(txt)
@@ -65,7 +67,7 @@ def pyprint(data):
 	return txt
 
 
-
+## interpret the input
 def service(data):
 	x= data['val']
 	print(x)
@@ -96,7 +98,7 @@ def service(data):
 	return manual(inst)
 
 
-
+### Take an instance and run it, build a response dictionary
 def manual(inst,reachtimeout = 30):
 	start,target,functions,expectation = inst.asTuple()
 
