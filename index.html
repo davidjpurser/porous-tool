@@ -3,6 +3,8 @@
    <head>
       <meta charset="UTF-8">
       <link rel="stylesheet" href="bootstrap.min.css">
+      <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+      <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
       <script src="jquery.min.js"></script>
       <style>
          header {
@@ -215,7 +217,7 @@ Here the invariant is again the whole space, but made up from N and singletons a
          
          	$('#go').on('click',function(){
                $('#output').val('computing...')
-         		$.ajax({
+         		xhrreq = $.ajax({
          			url: '/invariant',
          			contentType: "application/json",
          	        dataType: "json",
@@ -235,6 +237,7 @@ Here the invariant is again the whole space, but made up from N and singletons a
 
             $('#clear').on('click', function(){
                $('#input').val('');
+               xhrreq.abort();
                $('#output').val('');
             });
          });
