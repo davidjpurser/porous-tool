@@ -311,6 +311,7 @@ def buildinv(startpoint,target, functions):
 		semi.add(starter)
 		semi = dealWithInverters(semi, functions, mincounter)
 
+		print(semi)
 		#maybe everything turns out to be Z sets already
 		if not semi.includesNs():
 			return semi,  startpoint,semilinearTarget,functions
@@ -332,8 +333,15 @@ def buildinv(startpoint,target, functions):
 				if same_dir(startpoint,next, counters[0].apply(startpoint)):
 					if not semi.containsFuzz(myset):
 						semi.add(myset)
+						semi = dealWithInverters(semi, functions, mincounter)
 						Q.append(next)
 						heapq.heappush(Q,next)
+
+
+
+		#maybe everything turns out to be Z sets already
+		if not semi.includesNs():
+			return semi,  startpoint,semilinearTarget,functions
 
 		print(semi)
 
