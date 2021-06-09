@@ -31,16 +31,18 @@
       <div class="container">
          <div class="row">
             <div class="col-md-7">
-<h3>Input Format Explanation</h3>
+<h3>Input Format Explanation   <button class="toggleExplanation btn btn-info">Show/Hide</button></h3>
+   <div class="explanation">
             On the first line write the start point, target and optionally whether you expect it to be reachable.
             Supported targets are single numbers, or Z-linear sets, with {b+pZ} specified as b+p (note, b+-p is equivalent).
             <br>
             On subsequent lines, write the functions by writing the multiplier and the adder, i.e. <code>a b</code> means <code>f(x) = ax+b</code>. 
             <br>
             On the line after the last function, optionally, write ENDS. Everything after ENDS will be ignored, for example here we provide some explanation.<br>
-            </div>
+   </div>
+</div>
         
-            <div class="col-md-5">
+            <div class="col-md-5 explanation">
                <h3> Format</h3>
             <code>start target[+period] [True|False]<br>
             a b <br>
@@ -54,6 +56,8 @@
             <h3>Input area</h3>
             <div class="mb-1" style="line-height:40px;">
             Examples:
+            <button class="toggleExample btn btn-info">Show/Hide</button>
+            <span class="examples">
             <button class="example btn btn-primary" data="1 0 False
 1 -3
 2 0
@@ -163,11 +167,15 @@ When the Z-linear invariants cover the entire space the system can detect that t
 ENDS
 Here the invariant is again the whole space, but made up from N and singletons and the system does not tell you that this is the whole space.
 ">All2</button>
+</span>
    </div>
             <textarea id="input"></textarea>
             <br>
             <button id="go" class="btn btn-success">
             Go
+            </button>
+            <button id="clear" class="btn btn-primary">
+            Clear
             </button>
             <br>
             <h3>Output area</h3>
@@ -196,7 +204,14 @@ Here the invariant is again the whole space, but made up from N and singletons a
          		data = $(this).attr('data');
          		$('#input').val(data);
          		$('#go').click();
-         	})
+         	});
+            $('button.toggleExample').on('click',function(){
+               $('.examples').toggle();
+            });
+
+            $('button.toggleExplanation').on('click',function(){
+               $('.explanation').toggle();
+            });
          
          	$('#go').on('click',function(){
                $('#output').val('computing...')
@@ -216,9 +231,12 @@ Here the invariant is again the whole space, but made up from N and singletons a
                     $('#output').val('failed, try again'); 
                   }
          		});
-         
-         
          	});
+
+            $('#clear').on('click', function(){
+               $('#input').val('');
+               $('#output').val('');
+            });
          });
       </script>
 
