@@ -1,20 +1,29 @@
 import os
 import sys
 import json
-
+import time
+import locale
 
 from runner import *
 sys.path.insert(0, os.path.dirname(__file__))
 
+sys.stdout.reconfigure(encoding='utf-8')
+sys.stderr.reconfigure(encoding='utf-8')
+
 # server to host the program at invariants.1251.uk
 
 def home_handler(environ, start_fn):
-    start_fn('200 OK', [('Content-Type', 'text/html')])
-    with open('index.html', 'rb') as reader:
+    start_fn('200 OK', [('Content-Type', 'text/html; charset=utf-8')])
+    with open('index.html', 'r') as reader:
         return reader.read()
 
 def invariant_handler(environ, start_fn):
     # start_fn('200 OK', [('Content-Type', 'text/json; charset=utf-8')])
+    print(time.time())
+    print(sys.version_info)
+    print(sys.stdout.encoding)
+    print(locale.getpreferredencoding())
+
     try:
         request_body_size = int(environ.get('CONTENT_LENGTH', 0))
     except (ValueError):
