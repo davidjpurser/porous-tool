@@ -2,7 +2,7 @@
 
 ## Easy Version
 
-A live instance is available at [http://invariants.davidpurser.net](http://invariants.davidpurser.net)
+A live instance is available at [https://porous.mpi-sws.org](https://porous.mpi-sws.org)
 
 
 
