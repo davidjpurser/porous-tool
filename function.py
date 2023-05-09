@@ -59,6 +59,8 @@ class function:
 		return int(math.ceil((abs(self.add) + abs(extra))/(abs(self.mult)-1)))
 
 	def isEqual(self, fun):
+		if type(self) != type(fun):
+			return False
 		return self.mult == fun.mult and self.add == fun.add
 
 	def __eq__(self,fun):

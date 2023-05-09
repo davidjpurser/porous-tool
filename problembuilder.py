@@ -74,7 +74,7 @@ random.shuffle(list(powerset(types)))
 print(ordering)
 
 def getWork(largest):
-	for _ in range(8):
+	for _ in range(12):
 		for x in ordering:
 			functionTypes = (list(x))
 			if len(functionTypes) == 0:
@@ -123,7 +123,7 @@ def work(tpl):
 	with open('log.csv','a') as f:
 		f.write(inst.getName() +"\n")
 
-	data = runner.manual(inst, 30)
+	data = runner.manual(inst, 60)
 	print(data)
 
 	name = "-".join([str(x) for x in [stcode,nt,data['reachable'],'errors' in data, time.time()
@@ -152,7 +152,7 @@ def work(tpl):
 
 from multiprocessing import Pool
 if __name__ == '__main__':
-	with Pool(8) as p:
+	with Pool(32) as p:
 	    p.map(work, getWork(8))
 	    p.map(work, getWork(16))
 	    p.map(work, getWork(32))
@@ -161,3 +161,5 @@ if __name__ == '__main__':
 	    p.map(work, getWork(256))
 	    p.map(work, getWork(512))
 	    p.map(work, getWork(1024))
+	    p.map(work, getWork(2048))
+	    p.map(work, getWork(4096))
