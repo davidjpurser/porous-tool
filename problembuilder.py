@@ -152,7 +152,7 @@ def work(tpl):
 
 from multiprocessing import Pool
 if __name__ == '__main__':
-	with Pool(32) as p:
+	with Pool(16) as p:
 	    p.map(work, getWork(8))
 	    p.map(work, getWork(16))
 	    p.map(work, getWork(32))
