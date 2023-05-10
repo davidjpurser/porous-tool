@@ -108,8 +108,8 @@ if not os.path.exists("problems/errors"):
 if not os.path.exists("problems/good"):
     os.makedirs("problems/good")
 
-if not os.path.exists("document.csv"):
-	with open('document.csv','w') as f:
+if not os.path.exists("document-journal.csv"):
+	with open('document-journal.csv','w') as f:
 		writer = csv.writer(f)
 		row = ['stcode','ntcode','size','name','reachable','errors','errorlist','time1','time2','time3']
 		writer.writerow(row)
@@ -137,7 +137,7 @@ def work(tpl):
 		saveAs(name, inst, "good",data)
 		errors = str([])
 
-	with open('document.csv','a') as f:
+	with open('document-journal.csv','a') as f:
 		writer = csv.writer(f)
 		row = [stcode,nt,largest,name, data['reachable'],'errors' in data,errors]
 		for x in ['invariant', 'proofOfInvariant','proofOfReachability']:
@@ -162,4 +162,3 @@ if __name__ == '__main__':
 	    p.map(work, getWork(512))
 	    p.map(work, getWork(1024))
 	    p.map(work, getWork(2048))
-	    p.map(work, getWork(4096))
